@@ -1,4 +1,6 @@
 import sympy
+import numpy
+import matplotlib.pyplot as plt
 
 from math import pow
 from math import pi
@@ -34,6 +36,22 @@ class Solution:
 
     def plot3d(self):
         plot3d(self.solution, (x, self.plate.x1, self.plate.y1), (y, self.plate.x2, self.plate.y2))
+
+    def contourPlot(self, delta=0.1):
+        #TODO: need to update this method
+        X, Y = numpy.meshgrid(
+            numpy.arange(self.plate.x1, self.plate.y1, delta),
+            numpy.arange(self.plate.x2, self.plate.y2, delta))
+        Z = [[]]
+        for i in X:
+            for j in Y:
+                print(self.valueAt(i, j))
+                Z[i][j] = self.valueAt(i, j)
+        plt.figure()
+        contours = plt.contour(X, Y, Z, 3, colors='black')
+        plt.colorbar(contours)
+        plt.clabel(contours, inline=True, fontsize=8)
+        plt.show()
 
     def valueAt(self, a, b):
         return self.solution.subs({x: a, y: b})
