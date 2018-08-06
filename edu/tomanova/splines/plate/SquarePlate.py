@@ -1,7 +1,7 @@
 class SquarePlate:
 
-    def __init__(self, a1, a2, b1, b2):
-        self.a1 = a1
-        self.a2 = a2
-        self.b1 = b1
-        self.b2 = b2
+    def __init__(self, x1, x2, y1, y2):
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
