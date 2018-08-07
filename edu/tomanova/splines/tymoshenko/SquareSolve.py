@@ -67,7 +67,7 @@ class Solver:
         """
         return plot3d(self.solution, (x, self.plate.x1, self.plate.x2), (y, self.plate.y1, self.plate.y2))
 
-    def valueAt(self, a, b):
+    def valueAt(self, a, b, isNormalized=False):
         """
         Get value of solution in given point
         Important! Need to build solution before call this method
@@ -78,13 +78,20 @@ class Solver:
             x coordinate
         b: float
             y coordinate
+        isNormalized: bool
+            true, if value must be normalized, false, in otherwise
 
         Returns
         -------
-        solution: float
+        value: float
             value of solution in given point
         """
-        return self.solution.subs({x: a, y: b})
+        value = self.solution.subs({x: a, y: b})
+
+        if isNormalized:
+            return value * pow((self.plate.x2 - self.plate.x1), -4)
+        else:
+            return value
 
     def calculateW0(self):
         """
