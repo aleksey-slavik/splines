@@ -5,6 +5,7 @@
       <entry url="file://$PROJECT_DIR$">
         <entryData>
           <resourceRoots>
+            <path value="file://$PROJECT_DIR$/resources" />
             <path value="file://$PROJECT_DIR$/edu/tomanova/splines/resources" />
           </resourceRoots>
         </entryData>
