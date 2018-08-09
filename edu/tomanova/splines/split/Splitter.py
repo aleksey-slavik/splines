@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
 from edu.tomanova.splines.utils.DataHelper import loadFromFile
 """
 Contains methods for split area and plot triangulation
