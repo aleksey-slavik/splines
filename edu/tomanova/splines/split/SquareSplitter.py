@@ -1,11 +1,31 @@
 from edu.tomanova.splines.plate.Triangle import Triangle
 from edu.tomanova.splines.split.Splitter import Splitter
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
+"""
+Contains methods for split square areas
+
+@author: iryna.tomanova
+"""
 
 
 class SquareSplitter(Splitter):
 
     def splitToTriangles(self, plate, count):
+        """
+        Create triangles for square areas
+
+        Parameters
+        ----------
+        plate: SquarePlate
+            square plate parameters
+        count: int
+            plate divides count
+
+        Return
+        ------
+        triangles: list
+            list of triangles
+        """
         plates = self.splitToSquares(plate, count)
         triangles = []
 
@@ -51,6 +71,21 @@ class SquareSplitter(Splitter):
 
     @staticmethod
     def splitToSquares(plate, count):
+        """
+        Split square plate
+
+        Parameters
+        ----------
+        plate: SquarePlate
+            square plate parameters
+        count: int
+            plate divides count
+
+        Return
+        ------
+        squares: list
+            list of square plates
+        """
         squares = [plate]
 
         for k in range(count):
@@ -88,9 +123,3 @@ class SquareSplitter(Splitter):
             squares = new
 
         return squares
-
-
-pl = SquarePlate(-0.5, -0.5, 0.5, 0.5)
-splitter = SquareSplitter()
-splitter.splitToTriangles(pl, 3)
-splitter.plot(size=(10, 10))

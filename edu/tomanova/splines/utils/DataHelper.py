@@ -42,8 +42,8 @@ def loadFromFile(directoryName, fileName, fileFormat='dat', mode='rb'):
     mode: str
         specifies the mode in which the file is opened
 
-    Returns
-    -------
+    Return
+    ------
     data: object
         saved data
     """
