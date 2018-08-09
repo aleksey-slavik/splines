@@ -5,9 +5,9 @@ Contains methods for operation with images
 """
 
 
-def savePlotData(data, directoryName, fileName, imageFormat='png'):
+def saveSymPyData(data, directoryName, fileName, imageFormat='png'):
     """
-    Save plot data to file
+    Save sympy package plot data to file
 
     Parameters
     ----------
@@ -21,3 +21,21 @@ def savePlotData(data, directoryName, fileName, imageFormat='png'):
         format of file
     """
     data.save('../resources/' + directoryName + '/' + fileName + '.' + imageFormat)
+
+
+def savePyPlotData(data, directoryName, fileName, imageFormat='png'):
+    """
+    Save pyplot package plot data to file
+
+    Parameters
+    ----------
+    data: object
+        plot data
+    directoryName: str
+        name of directory
+    fileName: str
+        name of file
+    imageFormat: str
+        format of file
+    """
+    data.savefig('../resources/' + directoryName + '/' + fileName + '.' + imageFormat)
