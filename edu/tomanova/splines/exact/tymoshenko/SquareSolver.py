@@ -8,8 +8,6 @@ from sympy import cosh
 from sympy import sinh
 from sympy import tanh
 from sympy.plotting import plot3d
-
-from typing import Any, Union
 """
 Contains exact solution for square plate depends on Tymoshenko works
 
@@ -23,8 +21,6 @@ class Solver:
     """
     Contains solution data and necessary methods for work with him
     """
-    solution: Union[int, Any]
-    params: Union[int, Any]
 
     def __init__(self, plate, d=1, q=1, n=25):
         """
@@ -65,7 +61,7 @@ class Solver:
         Plot 3-dimensional surface
         Important! Need to build solution before call this method
         """
-        return plot3d(self.solution, (x, self.plate.x1, self.plate.x2), (y, self.plate.y1, self.plate.y2))
+        return plot3d(self.solution, (x, self.plate.apex1.x, self.plate.apex2.x), (y, self.plate.apex1.y, self.plate.apex2.y))
 
     def valueAt(self, a, b, isNormalized=False):
         """
@@ -89,7 +85,7 @@ class Solver:
         value = self.solution.subs({x: a, y: b})
 
         if isNormalized:
-            return value * pow((self.plate.x2 - self.plate.x1), -4)
+            return value * pow((self.plate.apex2.x - self.plate.apex1.x), -4)
         else:
             return value
 
@@ -107,12 +103,12 @@ class Solver:
         for m in range(1, self.n, 2):
             res += \
                 pow(-1, (m - 1) / 2) / pow(m, 5) * \
-                cos((m * pi * x) / (2 * self.plate.x2)) * \
-                (1 - (self.alpha(m) * tanh(self.alpha(m)) + 2) * cosh((m * pi * y) / (2 * self.plate.x2)) /
-                 (2 * cosh(self.alpha(m))) + sinh((m * pi * y) / (2 * self.plate.x2)) * m * pi * y /
-                 (4 * self.plate.x2 * cosh(self.alpha(m))))
+                cos((m * pi * x) / (2 * self.plate.apex2.x)) * \
+                (1 - (self.alpha(m) * tanh(self.alpha(m)) + 2) * cosh((m * pi * y) / (2 * self.plate.apex2.x)) /
+                 (2 * cosh(self.alpha(m))) + sinh((m * pi * y) / (2 * self.plate.apex2.x)) * m * pi * y /
+                 (4 * self.plate.apex2.x * cosh(self.alpha(m))))
 
-        res *= 4 * self.q * pow(2 * self.plate.x2, 4) / (pow(pi, 5) * self.d)
+        res *= 4 * self.q * pow(2 * self.plate.apex2.x, 4) / (pow(pi, 5) * self.d)
         return res
 
     def calculateW1(self):
@@ -127,13 +123,13 @@ class Solver:
         res = 0
 
         for m in range(1, self.n, 2):
-            res += (self.params.get(self.vars[m]) * pow(-1, (m - 1) / 2) * cos((m * pi * x) / (2 * self.plate.x2))) / \
-                   (pow(m, 2) * cosh(self.alpha(m))) * ((m * pi * y * sinh(m * pi * y / (2 * self.plate.x2))) /
-                                                        (2 * self.plate.x2) - self.alpha(m) *
+            res += (self.params.get(self.vars[m]) * pow(-1, (m - 1) / 2) * cos((m * pi * x) / (2 * self.plate.apex2.x))) / \
+                   (pow(m, 2) * cosh(self.alpha(m))) * ((m * pi * y * sinh(m * pi * y / (2 * self.plate.apex2.x))) /
+                                                        (2 * self.plate.apex2.x) - self.alpha(m) *
                                                         tanh(self.alpha(m)) * cosh(
-                        m * pi * y / (2 * self.plate.x2)))
+                        m * pi * y / (2 * self.plate.apex2.x)))
 
-        res *= pow(2 * self.plate.x2, 2) / (2 * pow(pi, 2) * self.d)
+        res *= pow(2 * self.plate.apex2.x, 2) / (2 * pow(pi, 2) * self.d)
         return res
 
     def calculateW2(self):
@@ -148,13 +144,13 @@ class Solver:
         res = 0
 
         for m in range(1, self.n, 2):
-            res += (self.params.get(self.vars[m]) * pow(-1, (m - 1) / 2) * cos((m * pi * y) / (2 * self.plate.y2))) / \
-                   (pow(m, 2) * cosh(self.beta(m))) * ((m * pi * x * sinh(m * pi * x / (2 * self.plate.y2))) /
-                                                       (2 * self.plate.y2) - self.beta(m) *
+            res += (self.params.get(self.vars[m]) * pow(-1, (m - 1) / 2) * cos((m * pi * y) / (2 * self.plate.apex2.y))) / \
+                   (pow(m, 2) * cosh(self.beta(m))) * ((m * pi * x * sinh(m * pi * x / (2 * self.plate.apex2.y))) /
+                                                       (2 * self.plate.apex2.y) - self.beta(m) *
                                                        tanh(self.beta(m)) * cosh(
-                        m * pi * x / (2 * self.plate.y2)))
+                        m * pi * x / (2 * self.plate.apex2.y)))
 
-        res *= pow(2 * self.plate.y2, 2) / (2 * pow(pi, 2) * self.d)
+        res *= pow(2 * self.plate.apex2.y, 2) / (2 * pow(pi, 2) * self.d)
         return res
 
     def getParams(self):
@@ -177,7 +173,7 @@ class Solver:
             system.append(
                 sympy.Eq(self.vars[i] / i *
                          (tanh(self.alpha(i)) + self.alpha(i) / pow(cosh(self.alpha(i)), 2)) + 8 * i / pi * val,
-                         4 * self.q * pow((2 * self.plate.x2), 2) / (pow(pi, 3) * pow(i, 4)) *
+                         4 * self.q * pow((2 * self.plate.apex2.x), 2) / (pow(pi, 3) * pow(i, 4)) *
                          (self.alpha(i) / pow(cosh(self.alpha(i)), 2) - tanh(self.alpha(i)))))
 
         self.params = sympy.solve(system, self.vars)
@@ -197,7 +193,7 @@ class Solver:
         alpha: float
             value for calculations
         """
-        return (m * pi * self.plate.y2) / (2 * self.plate.x2)
+        return (m * pi * self.plate.apex2.y) / (2 * self.plate.apex2.x)
 
     def beta(self, m):
         """
@@ -213,4 +209,4 @@ class Solver:
         beta: float
             value for calculations
         """
-        return (m * pi * self.plate.x2) / (2 * self.plate.y2)
+        return (m * pi * self.plate.apex2.x) / (2 * self.plate.apex2.y)

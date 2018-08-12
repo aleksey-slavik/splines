@@ -1,6 +1,8 @@
+from edu.tomanova.splines.plate.Apex import Apex
 from edu.tomanova.splines.plate.Triangle import Triangle
 from edu.tomanova.splines.split.Splitter import Splitter
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
+
 """
 Contains methods for split square areas
 
@@ -32,39 +34,39 @@ class SquareSplitter(Splitter):
         for i in range(len(plates)):
             triangles.append(
                 Triangle(
-                    plates[i].x1,
-                    plates[i].y1,
-                    plates[i].x2,
-                    plates[i].y1,
-                    (plates[i].x1 + plates[i].x2) / 2,
-                    (plates[i].y1 + plates[i].y2) / 2))
+                    Apex(plates[i].apex1.x,
+                         plates[i].apex1.y),
+                    Apex(plates[i].apex2.x,
+                         plates[i].apex1.y),
+                    Apex((plates[i].apex1.x + plates[i].apex2.x) / 2,
+                         (plates[i].apex1.y + plates[i].apex2.y) / 2)))
 
             triangles.append(
                 Triangle(
-                    plates[i].x2,
-                    plates[i].y1,
-                    plates[i].x2,
-                    plates[i].y2,
-                    (plates[i].x1 + plates[i].x2) / 2,
-                    (plates[i].y1 + plates[i].y2) / 2))
+                    Apex(plates[i].apex2.x,
+                         plates[i].apex1.y),
+                    Apex(plates[i].apex2.x,
+                         plates[i].apex2.y),
+                    Apex((plates[i].apex1.x + plates[i].apex2.x) / 2,
+                         (plates[i].apex1.y + plates[i].apex2.y) / 2)))
 
             triangles.append(
                 Triangle(
-                    plates[i].x2,
-                    plates[i].y2,
-                    plates[i].x1,
-                    plates[i].y2,
-                    (plates[i].x1 + plates[i].x2) / 2,
-                    (plates[i].y1 + plates[i].y2) / 2))
+                    Apex(plates[i].apex2.x,
+                         plates[i].apex2.y),
+                    Apex(plates[i].apex1.x,
+                         plates[i].apex2.y),
+                    Apex((plates[i].apex1.x + plates[i].apex2.x) / 2,
+                         (plates[i].apex1.y + plates[i].apex2.y) / 2)))
 
             triangles.append(
                 Triangle(
-                    plates[i].x1,
-                    plates[i].y2,
-                    plates[i].x1,
-                    plates[i].y1,
-                    (plates[i].x1 + plates[i].x2) / 2,
-                    (plates[i].y1 + plates[i].y2) / 2))
+                    Apex(plates[i].apex1.x,
+                         plates[i].apex2.y),
+                    Apex(plates[i].apex1.x,
+                         plates[i].apex1.y),
+                    Apex((plates[i].apex1.x + plates[i].apex2.x) / 2,
+                         (plates[i].apex1.y + plates[i].apex2.y) / 2)))
 
         self.triangles = triangles
         return self.triangles
@@ -94,31 +96,31 @@ class SquareSplitter(Splitter):
             for i in range(len(squares)):
                 new.append(
                     SquarePlate(
-                        squares[i].x1,
-                        squares[i].y1,
-                        (squares[i].x1 + squares[i].x2) / 2,
-                        (squares[i].y1 + squares[i].y2) / 2))
+                        Apex(squares[i].apex1.x,
+                             squares[i].apex1.y),
+                        Apex((squares[i].apex1.x + squares[i].apex2.x) / 2,
+                             (squares[i].apex1.y + squares[i].apex2.y) / 2)))
 
                 new.append(
                     SquarePlate(
-                        (squares[i].x1 + squares[i].x2) / 2,
-                        squares[i].y1,
-                        squares[i].x2,
-                        (squares[i].y1 + squares[i].y2) / 2))
+                        Apex((squares[i].apex1.x + squares[i].apex2.x) / 2,
+                             squares[i].apex1.y),
+                        Apex(squares[i].apex2.x,
+                             (squares[i].apex1.y + squares[i].apex2.y) / 2)))
 
                 new.append(
                     SquarePlate(
-                        (squares[i].x1 + squares[i].x2) / 2,
-                        (squares[i].y1 + squares[i].y2) / 2,
-                        squares[i].x2,
-                        squares[i].y2))
+                        Apex((squares[i].apex1.x + squares[i].apex2.x) / 2,
+                             (squares[i].apex1.y + squares[i].apex2.y) / 2),
+                        Apex(squares[i].apex2.x,
+                             squares[i].apex2.y)))
 
                 new.append(
                     SquarePlate(
-                        squares[i].x1,
-                        (squares[i].y1 + squares[i].y2) / 2,
-                        (squares[i].x1 + squares[i].x2) / 2,
-                        squares[i].y2))
+                        Apex(squares[i].apex1.x,
+                             (squares[i].apex1.y + squares[i].apex2.y) / 2),
+                        Apex((squares[i].apex1.x + squares[i].apex2.x) / 2,
+                             squares[i].apex2.y)))
 
             squares = new
 

@@ -8,7 +8,6 @@ Contains methods for split area and plot triangulation
 
 
 class Splitter:
-    triangles: list
 
     def fromFile(self, directoryName, fileName):
         """
@@ -49,8 +48,8 @@ class Splitter:
 
         for i in range(len(self.triangles)):
             plt.plot(
-                [self.triangles[i].x1, self.triangles[i].x2, self.triangles[i].x3, self.triangles[i].x1],
-                [self.triangles[i].y1, self.triangles[i].y2, self.triangles[i].y3, self.triangles[i].y1],
+                [self.triangles[i].apex1.x, self.triangles[i].apex2.x, self.triangles[i].apex3.x, self.triangles[i].apex1.x],
+                [self.triangles[i].apex1.y, self.triangles[i].apex2.y, self.triangles[i].apex3.y, self.triangles[i].apex1.y],
                 'k-')
 
         plt.show()

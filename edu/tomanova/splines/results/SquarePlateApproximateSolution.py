@@ -1,3 +1,4 @@
+from edu.tomanova.splines.plate.Apex import Apex
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
 from edu.tomanova.splines.split.SquareSplitter import SquareSplitter
 from edu.tomanova.splines.utils.DataHelper import saveToFile
@@ -9,7 +10,7 @@ Contains approximate solution of biharmonic equation for square plate with dimen
 """
 
 
-plate = SquarePlate(-0.5, -0.5, 0.5, 0.5)
+plate = SquarePlate(Apex(-0.5, -0.5), Apex(0.5, 0.5))
 splitter = SquareSplitter()
 triangles = splitter.splitToTriangles(plate, 0)
 splitPlotData = splitter.plot(size=(10, 10))
