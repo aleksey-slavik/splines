@@ -26,3 +26,6 @@ class Triangle:
 
     def __repr__(self):
         return str(self.__dict__)
+
+    def __eq__(self, other):
+        return self.apex1 == other.apex1 and self.apex2 == other.apex2 and self.apex3 == other.apex3

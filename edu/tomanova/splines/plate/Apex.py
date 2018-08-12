@@ -23,3 +23,6 @@ class Apex:
 
     def __repr__(self):
         return str(self.__dict__)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
