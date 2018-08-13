@@ -24,6 +24,18 @@ class Normal:
         self.point = Apex(
             (apex1.x + apex2.x) / 2,
             (apex1.y + apex2.y) / 2)
+        self.dn = 0
+
+    def setDN(self, dn):
+        """
+        Change value of dn parameter for current normal
+
+        Parameters
+        ----------
+        dn: float
+            value of dn parameter for current normal
+        """
+        self.dn = dn
 
     def __repr__(self):
         return str(self.__dict__)

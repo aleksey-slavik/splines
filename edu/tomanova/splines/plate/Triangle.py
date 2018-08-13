@@ -1,3 +1,4 @@
+from edu.tomanova.splines.plate.Normal import Normal
 """
 Consist data of triangle
 
@@ -23,6 +24,9 @@ class Triangle:
         self.apex1 = apex1
         self.apex2 = apex2
         self.apex3 = apex3
+        self.norm12 = Normal(apex1, apex2)
+        self.norm13 = Normal(apex1, apex3)
+        self.norm23 = Normal(apex2, apex3)
 
     def __repr__(self):
         return str(self.__dict__)
