@@ -1,60 +1,100 @@
 import sympy
+
 from math import factorial
+from edu.tomanova.splines.core.Derivative import Derivative
+"""
+Contains spline of 5th degree
+
+@author: iryna.tomanova
+"""
 
 x, y = sympy.symbols(('x', 'y'))
 
 
 class Spline:
     def __init__(self, triangle):
+        """
+        Setup initial data
+
+        Parameters
+        ----------
+        triangle: Triangle
+            triangle, based on which spline was created
+        """
         self.triangle = triangle
 
+    def h(self, k, b):
+        """
 
-def h00(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * \
-           (alpha(apex1, apex2, apex3) +
-            beta(1, 0, apex1, apex2, apex3) * (x - apex1.x) + beta(0, 1, apex1, apex2, apex3) * (y - apex1.y) +
-            beta(2, 0, apex1, apex2, apex3) * (x - apex1.x) ** 2 / 2 +
-            beta(1, 1, apex1, apex2, apex3) * (x - apex1.x) * (y - apex1.y) +
-            beta(0, 2, apex1, apex2, apex3) * (y - apex1.y) ** 2 / 2)
+        Parameters
+        ----------
+        k: int
+            number of apex
+        b: Derivative
+            derivative value
+        :return:
+        """
+        apex = self.triangle.apexes()
+        numb = [1, 2, 3]
+        numb.remove(k)
+        i = numb[0] - 1
+        j = numb[1] - 1
+        k = k - 1
 
+        def omega():
+            """
+            Represent omega(x,y)
 
-def h10(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * \
-           (alpha(apex1, apex2, apex3) +
-            beta(1, 0, apex1, apex2, apex3) * (x - apex1.x) + beta(0, 1, apex1, apex2, apex3) * (y - apex1.y))
+            Return
+            ------
+            det: expression
+                determinant of matrix omega(x,y)
+            """
+            matrix = sympy.Matrix(
+                [[x, y, 1],
+                 [apex[i].x, apex[i].y, 1],
+                 [apex[j].x, apex[j].y, 1]])
+            return matrix.det()
 
+        def DbOmega(derivative):
+            """
+            Represent derivative of omega(x, y) ** (-3) at point k
 
-def h01(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * \
-           (alpha(apex1, apex2, apex3) +
-            beta(1, 0, apex1, apex2, apex3) * (x - apex1.x) + beta(0, 1, apex1, apex2, apex3) * (y - apex1.y))
+            Parameters
+            ----------
+            derivative: Derivative
+                derivative value
 
+            Return
+            ------
+            value: expression
+                derivative of omega(x, y) ** (-3) at point k
+            """
+            value = sympy.diff(omega() ** (-3), x, derivative.dx, y, derivative.dy)
+            return value.subs({x: apex[k].x, y: apex[k].y})
 
-def h20(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * alpha(apex1, apex2, apex3)
+        def DbOmegaSeries():
+            """
+            Represent series of omega(x, y) ** (-3) at point k
 
+            Return
+            ------
+            series: expression
+                series of omega(x, y) ** (-3) at point k
+            """
+            seriesLength = 2 - b.dx - b.dy
+            series = 0
 
-def h11(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * alpha(apex1, apex2, apex3)
+            for n in range(seriesLength + 1):
+                for m in range(n + 1):
+                    series += DbOmega(Derivative(m, n - m)) * \
+                              (x - apex[k].x) ** m / factorial(m) * \
+                              (y - apex[k].y) ** (n - m) / factorial(n - m)
 
+            return series
 
-def h02(b1, b2, apex1, apex2, apex3):
-    return ((x - apex1.x) ** b1) * ((y - apex1.y) ** b2) * \
-           (omega(apex2, apex3) ** 3) / (factorial(b1) * factorial(b2)) * alpha(apex1, apex2, apex3)
-
-
-def omega(apex1, apex2):
-    matrix = sympy.Matrix(
-        [[x, y, 1],
-         [apex1.x, apex1.y, 1],
-         [apex2.x, apex2.y, 1]])
-
-    return matrix.det()
+        return ((x - apex[k].x) ** b.dx) * ((y - apex[k].y) ** b.dy) * (omega() ** 3) / (
+                factorial(b.dx) * factorial(b.dy)) * DbOmegaSeries()
 
 
 def omega2(apex1, apex2):
@@ -94,13 +134,3 @@ def sing(apex1, apex2, apex3):
         return -1
 
     return 0
-
-
-def alpha(apex1, apex2, apex3):
-    value = 1 / (omega(apex2, apex3) ** 3)
-    return value.subs({x: apex1.x, y: apex1.y})
-
-
-def beta(b1, b2, apex1, apex2, apex3):
-    value = sympy.diff(1 / (omega(apex2, apex3) ** 3), x, b1, y, b2)
-    return value.subs({x: apex1.x, y: apex1.y})

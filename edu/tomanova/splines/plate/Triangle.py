@@ -28,6 +28,17 @@ class Triangle:
         self.norm13 = Normal(apex1, apex3)
         self.norm23 = Normal(apex2, apex3)
 
+    def apexes(self):
+        """
+        Represent apexes of current triangle as list
+
+        Return
+        ------
+        apexes: list
+            list of apexes of triangle
+        """
+        return [self.apex1, self.apex2, self.apex3]
+
     def __repr__(self):
         return str(self.__dict__)
 
