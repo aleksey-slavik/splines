@@ -12,6 +12,7 @@ x, y = sympy.symbols(('x', 'y'))
 
 
 class Spline:
+
     def __init__(self, triangle):
         """
         Setup initial data
@@ -25,6 +26,7 @@ class Spline:
 
     def h(self, k, b):
         """
+        Create function h(x,y)
 
         Parameters
         ----------
@@ -32,14 +34,18 @@ class Spline:
             number of apex
         b: Derivative
             derivative value
-        :return:
+
+        Return
+        ------
+        result: expression
+            function h(x,y)
         """
         apex = self.triangle.apexes()
         numb = [1, 2, 3]
         numb.remove(k)
         i = numb[0] - 1
         j = numb[1] - 1
-        k = k - 1
+        k -= 1
 
         def omega():
             """
@@ -95,6 +101,25 @@ class Spline:
 
         return ((x - apex[k].x) ** b.dx) * ((y - apex[k].y) ** b.dy) * (omega() ** 3) / (
                 factorial(b.dx) * factorial(b.dy)) * DbOmegaSeries()
+
+    def w(self):
+        """
+        Create function w(x,y)
+
+        Return
+        ------
+        result: expression
+            function w(x,y)
+        """
+        apex = self.triangle.apexes()
+        result = 0
+
+        for tr in range(3):
+            for n in range(3):
+                for m in range(n + 1):
+                    result += apex[tr].getParam(Derivative(m, n - m)) * self.h(tr + 1, Derivative(m, n - m))
+
+        return result
 
 
 def omega2(apex1, apex2):

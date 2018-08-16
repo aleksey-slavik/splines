@@ -1,3 +1,4 @@
+from edu.tomanova.splines.core.Derivative import Derivative
 """
 Consist data of apex
 
@@ -118,6 +119,33 @@ class Apex:
             value of d^2f(x,y)/dy^2 for current apex
         """
         self.dyyf = dyyf
+
+    def getParam(self, derivative):
+        """
+        Return parameter of apex depends on derivative
+
+        Parameters
+        ----------
+        derivative: Derivative
+            given derivative
+
+        Return
+        ------
+        value: float
+             parameter of apex
+        """
+        if derivative == Derivative(0, 0):
+            return self.f
+        elif derivative == Derivative(1, 0):
+            return self.dxf
+        elif derivative == Derivative(0, 1):
+            return self.dyf
+        elif derivative == Derivative(2, 0):
+            return self.dxxf
+        elif derivative == Derivative(1, 1):
+            return self.dxyf
+        elif derivative == Derivative(0, 2):
+            return self.dyyf
 
     def __repr__(self):
         return str(self.__dict__)
