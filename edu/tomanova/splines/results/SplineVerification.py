@@ -5,6 +5,7 @@ from edu.tomanova.splines.core.Spline import Spline
 from edu.tomanova.splines.core.Derivative import Derivative
 from edu.tomanova.splines.plate.Triangle import Triangle
 from edu.tomanova.splines.plate.Apex import Apex
+
 """
 Contains verification of properties of spline of 5th degree 
 on triangle with apexes (0, 0), (d, 0), (0, d) for function of 6th degree
@@ -27,48 +28,53 @@ f = \
     x * y ** 5 / factorial(5) + \
     y ** 6 / factorial(6)
 
+
+def Dh(func, derivative, point):
+    value = sympy.diff(func, x, derivative.dx, y, derivative.dy)
+    return value.subs({x: point.x, y: point.y})
+
+
 triangle = Triangle(apex1, apex2, apex3)
 spline = Spline(triangle)
 
+print("h(1,0,0) = {0}".format(spline.h(1, Derivative(0, 0))))
+print("h(1,1,0) = {0}".format(spline.h(1, Derivative(1, 0))))
+print("h(1,0,1) = {0}".format(spline.h(1, Derivative(0, 1))))
+print("h(1,2,0) = {0}".format(spline.h(1, Derivative(2, 0))))
+print("h(1,1,1) = {0}".format(spline.h(1, Derivative(1, 1))))
+print("h(1,0,2) = {0}".format(spline.h(1, Derivative(0, 2))))
+
+print("h(2,0,0) = {0}".format(spline.h(2, Derivative(0, 0))))
+print("h(2,1,0) = {0}".format(spline.h(2, Derivative(1, 0))))
+print("h(2,0,1) = {0}".format(spline.h(2, Derivative(0, 1))))
+print("h(2,2,0) = {0}".format(spline.h(2, Derivative(2, 0))))
+print("h(2,1,1) = {0}".format(spline.h(2, Derivative(1, 1))))
+print("h(2,0,2) = {0}".format(spline.h(2, Derivative(0, 2))))
+
+print("h(3,0,0) = {0}".format(spline.h(3, Derivative(0, 0))))
+print("h(3,1,0) = {0}".format(spline.h(3, Derivative(1, 0))))
+print("h(3,0,1) = {0}".format(spline.h(3, Derivative(0, 1))))
+print("h(3,2,0) = {0}".format(spline.h(3, Derivative(2, 0))))
+print("h(3,1,1) = {0}".format(spline.h(3, Derivative(1, 1))))
+print("h(3,0,2) = {0}".format(spline.h(3, Derivative(0, 2))))
+
 print('Verification for h:')
-h100 = spline.h(1, Derivative(0, 0))
-h110 = spline.h(1, Derivative(1, 0))
-h101 = spline.h(1, Derivative(0, 1))
-h120 = spline.h(1, Derivative(2, 0))
-h111 = spline.h(1, Derivative(1, 1))
-h102 = spline.h(1, Derivative(0, 2))
+print('-----------------------------------------------------------------------------')
+print('|(x,y)  |(dx,dy)|h(x,y)   |dxh(x,y) |dyh(x,y) |dxxh(x,y)|dxyh(x,y)|dyyh(x,y)|')
+print('-----------------------------------------------------------------------------')
+for tr in range(3):
+    for n in range(3):
+        for m in range(n + 1):
+            h = Dh(spline.h(tr + 1, Derivative(0, 0)), Derivative(n - m, m), triangle.apexes()[tr])
+            dxh = Dh(spline.h(tr + 1, Derivative(1, 0)), Derivative(n - m, m), triangle.apexes()[tr])
+            dyh = Dh(spline.h(tr + 1, Derivative(0, 1)), Derivative(n - m, m), triangle.apexes()[tr])
+            dxxh = Dh(spline.h(tr + 1, Derivative(2, 0)), Derivative(n - m, m), triangle.apexes()[tr])
+            dxyh = Dh(spline.h(tr + 1, Derivative(1, 1)), Derivative(n - m, m), triangle.apexes()[tr])
+            dyyh = Dh(spline.h(tr + 1, Derivative(0, 2)), Derivative(n - m, m), triangle.apexes()[tr])
 
-h200 = spline.h(2, Derivative(0, 0))
-h210 = spline.h(2, Derivative(1, 0))
-h201 = spline.h(2, Derivative(0, 1))
-h220 = spline.h(2, Derivative(2, 0))
-h211 = spline.h(2, Derivative(1, 1))
-h202 = spline.h(2, Derivative(0, 2))
-
-h300 = spline.h(3, Derivative(0, 0))
-h310 = spline.h(3, Derivative(1, 0))
-h301 = spline.h(3, Derivative(0, 1))
-h320 = spline.h(3, Derivative(2, 0))
-h311 = spline.h(3, Derivative(1, 1))
-h302 = spline.h(3, Derivative(0, 2))
-
-print("h(1,0,0) = {0}".format(h100))
-print("h(1,1,0) = {0}".format(h110))
-print("h(1,0,1) = {0}".format(h101))
-print("h(1,2,0) = {0}".format(h120))
-print("h(1,1,1) = {0}".format(h111))
-print("h(1,0,2) = {0}".format(h102))
-
-print("h(2,0,0) = {0}".format(h200))
-print("h(2,1,0) = {0}".format(h210))
-print("h(2,0,1) = {0}".format(h201))
-print("h(2,2,0) = {0}".format(h220))
-print("h(2,1,1) = {0}".format(h211))
-print("h(2,0,2) = {0}".format(h202))
-
-print("h(3,0,0) = {0}".format(h300))
-print("h(3,1,0) = {0}".format(h310))
-print("h(3,0,1) = {0}".format(h301))
-print("h(3,2,0) = {0}".format(h320))
-print("h(3,1,1) = {0}".format(h311))
-print("h(3,0,2) = {0}".format(h302))
+            print("|({0},{1})  |({2},{3})  |{4}        |{5}        |{6}        |{7}        |{8}        |{9}        |"
+                .format(
+                    triangle.apexes()[tr].x, triangle.apexes()[tr].y,
+                    n - m, m,
+                    h, dxh, dyh, dxxh, dxyh, dyyh))
+            print('-----------------------------------------------------------------------------')
