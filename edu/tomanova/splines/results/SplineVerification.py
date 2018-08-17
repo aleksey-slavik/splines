@@ -176,7 +176,7 @@ for tr in range(3):
 
             print('-----------------------------------------------')
 
-w = spline.w()
+w = sympy.simplify(spline.w())
 print("w = {0}".format(w))
 print('Verification for w:')
 print('-------------------------------------------------------------------')
@@ -222,26 +222,52 @@ for tr in range(3):
     print('----------------------------------')
 
 print('Verification at apexes:')
-print('------------------------------------------------------')
-print('|H(i,j)|(x,y)  |(dx,dy)|H   |dxH |dyH |dxxH|dxyH|dyyH|')
-print('------------------------------------------------------')
+print('-----------------------------')
+print('|H(i,j)|(x,y)  |(dx,dy)|H   |')
+print('-----------------------------')
+
 for tr in range(3):
     for n in range(3):
         for m in range(n + 1):
             H = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
-            dxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
-            dyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
-            dxxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
-            dxyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
-            dyyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
 
-            print("|{0}|({1},{2})  |({3},{4})  |{5}   |{6}   |{7}   |{8}   |{9}   |{10}   |".format(
+            print("|{0}|({1},{2})  |({3},{4})  |{5}   |".format(
                     alias[tr],
                     triangle.apexes[tr].x, triangle.apexes[tr].y,
                     n - m, m,
-                    H, dxH, dyH, dxxH, dxyH, dyyH))
+                    H))
 
-            print('------------------------------------------------------')
+            print('-----------------------------')
 
-print("S5 = {0}".format(sympy.simplify(spline.build())))
+S = sympy.simplify(spline.build())
+print("S5 = {0}".format(S))
 print('Verification for S5:')
+print('Verification at apexes:')
+print('------------------------')
+print('|(x,y)  |(dx,dy)|f-S   |')
+print('------------------------')
+
+for tr in range(3):
+    for n in range(3):
+        for m in range(n + 1):
+            fS = Df(f, Derivative(n - m, m), triangle.apexes[tr]) - Df(S, Derivative(n - m, m), triangle.apexes[tr])
+
+            print("|({0},{1})  |({2},{3})  |{4}     |".format(
+                    triangle.apexes[tr].x, triangle.apexes[tr].y,
+                    n - m, m,
+                    fS))
+
+            print('------------------------')
+
+print('Verification at middle points:')
+print('------------------')
+print('|(x,y)    |f-S   |')
+print('------------------')
+listS = [Dn12(f) - Dn12(S), Dn13(f) - Dn13(S), Dn23(f) - Dn23(S)]
+
+for tr in range(3):
+    print("|({0},{1})|{2}     |".format(
+        triangle.normals[tr].point.x, triangle.normals[tr].point.y,
+        listS[tr]))
+
+    print('------------------')

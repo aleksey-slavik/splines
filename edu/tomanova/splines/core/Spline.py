@@ -26,12 +26,20 @@ class Spline:
         self.triangle = triangle
 
     def build(self):
+        """
+        Create spline of 5th degree
+
+        Return
+        ------
+        spline: expression
+            spline of 5th degree
+        """
         spline = self.w()
 
         for k in range(3):
             i = self.triangle.normalApexes[k][0]
             j = self.triangle.normalApexes[k][1]
-            spline += (self.triangle.normals[k].dn - self.dw(i, j)) * self.H(i, j)
+            spline += (self.triangle.getNormal(i - 1, j - 1).dn - self.dw(i, j)) * self.H(i, j)
 
         return spline
 
@@ -133,6 +141,21 @@ class Spline:
         return result
 
     def dw(self, i, j):
+        """
+        Depends on w(x,y) create function dn(w(x,y))
+
+        Parameters
+        ----------
+        i: int
+            number of apex
+        j: int
+            number of apex
+
+        Return
+        ------
+        dw: expression
+            function dn(w(x,y))
+        """
         numb = [1, 2, 3]
         numb.remove(i)
         numb.remove(j)
@@ -142,7 +165,7 @@ class Spline:
         apex = self.triangle.apexes
         normal = self.triangle.getNormal(i, j)
         dw = normal.sign(apex[k]) / apex[i].distance(apex[j]) * (
-                (apex[i].y - apex[j].y) * sympy.diff(self.w(), x) + (apex[i].x - apex[j].x) * sympy.diff(self.w(), y))
+                (apex[i].y - apex[j].y) * sympy.diff(self.w(), x) - (apex[i].x - apex[j].x) * sympy.diff(self.w(), y))
         return dw.subs({x: normal.point.x, y: normal.point.y})
 
     def H(self, i, j):
