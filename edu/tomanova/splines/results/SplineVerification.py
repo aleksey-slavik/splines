@@ -198,9 +198,10 @@ print("H(1,3) = {0}".format(spline.H(1, 3)))
 print("H(2,3) = {0}".format(spline.H(2, 3)))
 print('Verification for H:')
 print('Verification at middle points:')
-print('---------------------------')
-print('|(x,y)     |dn12|dn13|dn23|')
-print('---------------------------')
+print('----------------------------------')
+print('|H(i,j)|(x,y)     |dn12|dn13|dn23|')
+print('----------------------------------')
+alias = ['H(1,2)', 'H(1,3)', 'H(2,3)']
 listH = [spline.H(1, 2), spline.H(1, 3), spline.H(2, 3)]
 
 for tr in range(3):
@@ -208,9 +209,32 @@ for tr in range(3):
     dn13 = Dn13(listH[tr])
     dn23 = Dn23(listH[tr])
 
-    print("|({0}, {1})|{2}   |{3}   |{4}   |".format(
+    print("|{0}|({1}, {2})|{3}   |{4}   |{5}   |".format(
+        alias[tr],
         triangle.normals()[tr].point.x, triangle.normals()[tr].point.y,
         dn12, dn13, dn23
     ))
 
-    print('---------------------------')
+    print('----------------------------------')
+
+print('Verification at apexes:')
+print('------------------------------------------------------')
+print('|H(i,j)|(x,y)  |(dx,dy)|H   |dxH |dyH |dxxH|dxyH|dyyH|')
+print('------------------------------------------------------')
+for tr in range(3):
+    for n in range(3):
+        for m in range(n + 1):
+            H = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            dxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            dyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            dxxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            dxyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            dyyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+
+            print("|{0}|({1},{2})  |({3},{4})  |{5}   |{6}   |{7}   |{8}   |{9}   |{10}   |".format(
+                    alias[tr],
+                    triangle.apexes()[tr].x, triangle.apexes()[tr].y,
+                    n - m, m,
+                    H, dxH, dyH, dxxH, dxyH, dyyH))
+
+            print('------------------------------------------------------')
