@@ -39,6 +39,40 @@ class Triangle:
         """
         return [self.apex1, self.apex2, self.apex3]
 
+    def normals(self):
+        """
+        Represent normals of current triangle as list
+
+        Return
+        ------
+        normals: list
+            list of normals of triangle
+        """
+        return [self.norm12, self.norm13, self.norm23]
+
+    def getNormal(self, i, j):
+        """
+        Find normal by numbers of two apexes
+
+        Parameters
+        ----------
+        i: int
+            number of first apex
+        j: int
+            number of second apex
+
+        Return
+        ------
+        normal: Normal
+            normal of triangle between apexes
+        """
+        apex = self.apexes()
+        normal = self.normals()
+
+        for k in range(3):
+            if normal[k] == Normal(apex[i], apex[j]):
+                return normal[k]
+
     def __repr__(self):
         return str(self.__dict__)
 

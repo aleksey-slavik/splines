@@ -2,6 +2,7 @@ import sympy
 
 from math import factorial
 from edu.tomanova.splines.core.Derivative import Derivative
+
 """
 Contains spline of 5th degree
 
@@ -121,41 +122,103 @@ class Spline:
 
         return result
 
+    def H(self, i, j):
+        """
+        Create function H(i,j)
 
-def omega2(apex1, apex2):
-    matrix = sympy.Matrix(
-        [[x - apex2.x, y - apex2.y, 0],
-         [apex1.x - apex2.x, apex1.y - apex2.y, 0],
-         [apex2.x, apex2.y, 1]])
+        Parameters
+        ----------
+        i: int
+            number of apex
+        j: int
+            number of apex
 
-    return matrix.det()
+        Return
+        ------
+        result: expression
+            function H(x,y)
+        """
 
+        apex = self.triangle.apexes()
+        numb = [1, 2, 3]
+        numb.remove(i)
+        numb.remove(j)
+        i -= 1
+        j -= 1
+        k = numb[0] - 1
 
-def omega3(apex1, apex2, apex3):
-    matrix = sympy.Matrix(
-        [[(apex1.x + apex2.x) / 2 - apex3.x, (apex1.y + apex2.y) / 2 - apex3.y, 0],
-         [apex2.x - apex3.x, apex2.y - apex3.y, 0],
-         [apex3.x, apex3.y, 1]])
+        def delta():
+            """
+            Represent delta(i,j,k)
 
-    return matrix.det()
+            Return:
+            det: expression
+                determinant of matrix delta(i,j,k)
+            """
+            matrix = sympy.Matrix(
+                [[apex[i].x, apex[i].y, 1],
+                 [apex[j].x, apex[j].y, 1],
+                 [apex[k].x, apex[k].y, 1]])
 
+            return matrix.det()
 
-def delta(apex1, apex2, apex3):
-    matrix = sympy.Matrix(
-        [[apex1.x, apex1.y, 1],
-         [apex2.x, apex2.y, 1],
-         [apex3.x, apex3.y, 1]])
+        def sign():
+            """
+            Represent sign(delta(i,j,k))
 
-    return matrix.det()
+            Return:
+            value: int
+                signum of determinant of matrix delta(i,j,k)
+            """
+            value = delta()
 
+            if value > 0:
+                return 1
+            elif value < 0:
+                return -1
+            else:
+                return 0
 
-def sing(apex1, apex2, apex3):
-    value = delta(apex1, apex2, apex3)
+        def omega(a, b):
+            """
+            Represent omega(x,y)
 
-    if value > 0:
-        return 1
+            Parameters
+            ----------
+            a: int
+                number of apex
+            b: int
+                number of apex
 
-    if value < 0:
-        return -1
+            Return
+            ------
+            det: expression
+                determinant of matrix omega(x,y)
+            """
+            matrix = sympy.Matrix(
+                [[x - apex[b].x, y - apex[b].y, 0],
+                 [apex[a].x - apex[b].x, apex[a].y - apex[b].y, 0],
+                 [apex[b].x, apex[b].y, 1]])
 
-    return 0
+            return matrix.det()
+
+        def omegaSubs(a, b):
+            """
+            Represent omega(x,y) with substitution normal
+
+            Parameters
+            ----------
+            a: int
+                number of apex
+            b: int
+                number of apex
+
+            Return
+            ------
+            det: float
+                determinant of matrix omega(x,y)
+            """
+            return omega(a, b).subs({x: self.triangle.getNormal(i, j).point.x, y: self.triangle.getNormal(i, j).point.y})
+
+        return omega(i, k) ** 2 * omega(j, k) ** 2 * omega(i, j) * sign() / (
+                    omegaSubs(i, k) ** 2 * omegaSubs(j, k) ** 2 * apex[i].distance(apex[j]))

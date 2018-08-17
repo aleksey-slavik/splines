@@ -1,3 +1,5 @@
+import sympy
+
 from edu.tomanova.splines.core.Derivative import Derivative
 """
 Consist data of apex
@@ -146,6 +148,22 @@ class Apex:
             return self.dxyf
         elif derivative == Derivative(0, 2):
             return self.dyyf
+
+    def distance(self, other):
+        """
+        Calculate distance to other apex
+
+        Parameters
+        ----------
+        other: Apex
+            other apex
+
+        Return
+        ------
+        sqrt: float
+            distance between apexes
+        """
+        return sympy.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
     def __repr__(self):
         return str(self.__dict__)
