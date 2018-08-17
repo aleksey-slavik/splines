@@ -127,6 +127,10 @@ apex3.params(Df(f, Derivative(0, 0), apex3),
              Df(f, Derivative(0, 2), apex3))
 
 triangle = Triangle(apex1, apex2, apex3)
+triangle.norm12.dn = Dn12(f)
+triangle.norm23.dn = Dn23(f)
+triangle.norm13.dn = Dn13(f)
+
 spline = Spline(triangle)
 
 print("h(1,0,0) = {0}".format(spline.h(1, Derivative(0, 0))))
@@ -158,15 +162,15 @@ print('-----------------------------------------------')
 for tr in range(3):
     for n in range(3):
         for m in range(n + 1):
-            h = Df(spline.h(tr + 1, Derivative(0, 0)), Derivative(n - m, m), triangle.apexes()[tr])
-            dxh = Df(spline.h(tr + 1, Derivative(1, 0)), Derivative(n - m, m), triangle.apexes()[tr])
-            dyh = Df(spline.h(tr + 1, Derivative(0, 1)), Derivative(n - m, m), triangle.apexes()[tr])
-            dxxh = Df(spline.h(tr + 1, Derivative(2, 0)), Derivative(n - m, m), triangle.apexes()[tr])
-            dxyh = Df(spline.h(tr + 1, Derivative(1, 1)), Derivative(n - m, m), triangle.apexes()[tr])
-            dyyh = Df(spline.h(tr + 1, Derivative(0, 2)), Derivative(n - m, m), triangle.apexes()[tr])
+            h = Df(spline.h(tr + 1, Derivative(0, 0)), Derivative(n - m, m), triangle.apexes[tr])
+            dxh = Df(spline.h(tr + 1, Derivative(1, 0)), Derivative(n - m, m), triangle.apexes[tr])
+            dyh = Df(spline.h(tr + 1, Derivative(0, 1)), Derivative(n - m, m), triangle.apexes[tr])
+            dxxh = Df(spline.h(tr + 1, Derivative(2, 0)), Derivative(n - m, m), triangle.apexes[tr])
+            dxyh = Df(spline.h(tr + 1, Derivative(1, 1)), Derivative(n - m, m), triangle.apexes[tr])
+            dyyh = Df(spline.h(tr + 1, Derivative(0, 2)), Derivative(n - m, m), triangle.apexes[tr])
 
             print("|({0},{1})  |({2},{3})  |{4}   |{5}   |{6}   |{7}   |{8}   |{9}   |".format(
-                    triangle.apexes()[tr].x, triangle.apexes()[tr].y,
+                    triangle.apexes[tr].x, triangle.apexes[tr].y,
                     n - m, m,
                     h, dxh, dyh, dxxh, dxyh, dyyh))
 
@@ -180,15 +184,15 @@ print('|(x,y)|f-w      |dxf-dxh  |dyf-dyh  |dxxf-dxxh|dxyf-dxyh|dyyf-dyyh|')
 print('-------------------------------------------------------------------')
 
 for tr in range(3):
-    fw = Df(f, Derivative(0, 0), triangle.apexes()[tr]) - Df(w, Derivative(0, 0), triangle.apexes()[tr])
-    dxfw = Df(f, Derivative(1, 0), triangle.apexes()[tr]) - Df(w, Derivative(1, 0), triangle.apexes()[tr])
-    dyfw = Df(f, Derivative(0, 1), triangle.apexes()[tr]) - Df(w, Derivative(0, 1), triangle.apexes()[tr])
-    dxxfw = Df(f, Derivative(2, 0), triangle.apexes()[tr]) - Df(w, Derivative(2, 0), triangle.apexes()[tr])
-    dxyfw = Df(f, Derivative(1, 1), triangle.apexes()[tr]) - Df(w, Derivative(1, 1), triangle.apexes()[tr])
-    dyyfw = Df(f, Derivative(0, 2), triangle.apexes()[tr]) - Df(w, Derivative(0, 2), triangle.apexes()[tr])
+    fw = Df(f, Derivative(0, 0), triangle.apexes[tr]) - Df(w, Derivative(0, 0), triangle.apexes[tr])
+    dxfw = Df(f, Derivative(1, 0), triangle.apexes[tr]) - Df(w, Derivative(1, 0), triangle.apexes[tr])
+    dyfw = Df(f, Derivative(0, 1), triangle.apexes[tr]) - Df(w, Derivative(0, 1), triangle.apexes[tr])
+    dxxfw = Df(f, Derivative(2, 0), triangle.apexes[tr]) - Df(w, Derivative(2, 0), triangle.apexes[tr])
+    dxyfw = Df(f, Derivative(1, 1), triangle.apexes[tr]) - Df(w, Derivative(1, 1), triangle.apexes[tr])
+    dyyfw = Df(f, Derivative(0, 2), triangle.apexes[tr]) - Df(w, Derivative(0, 2), triangle.apexes[tr])
 
     print("|({0},{1})|{2}        |{3}        |{4}        |{5}        |{6}        |{7}        |".format(
-            triangle.apexes()[tr].x, triangle.apexes()[tr].y,
+            triangle.apexes[tr].x, triangle.apexes[tr].y,
             fw, dxfw, dyfw, dxxfw, dxyfw, dyyfw))
 
     print('-------------------------------------------------------------------')
@@ -211,7 +215,7 @@ for tr in range(3):
 
     print("|{0}|({1}, {2})|{3}   |{4}   |{5}   |".format(
         alias[tr],
-        triangle.normals()[tr].point.x, triangle.normals()[tr].point.y,
+        triangle.normals[tr].point.x, triangle.normals[tr].point.y,
         dn12, dn13, dn23
     ))
 
@@ -224,17 +228,20 @@ print('------------------------------------------------------')
 for tr in range(3):
     for n in range(3):
         for m in range(n + 1):
-            H = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
-            dxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
-            dyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
-            dxxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
-            dxyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
-            dyyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes()[tr])
+            H = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
+            dxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
+            dyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
+            dxxH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
+            dxyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
+            dyyH = Df(listH[tr], Derivative(n - m, m), triangle.apexes[tr])
 
             print("|{0}|({1},{2})  |({3},{4})  |{5}   |{6}   |{7}   |{8}   |{9}   |{10}   |".format(
                     alias[tr],
-                    triangle.apexes()[tr].x, triangle.apexes()[tr].y,
+                    triangle.apexes[tr].x, triangle.apexes[tr].y,
                     n - m, m,
                     H, dxH, dyH, dxxH, dxyH, dyyH))
 
             print('------------------------------------------------------')
+
+print("S5 = {0}".format(sympy.simplify(spline.build())))
+print('Verification for S5:')

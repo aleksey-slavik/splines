@@ -27,28 +27,9 @@ class Triangle:
         self.norm12 = Normal(apex1, apex2)
         self.norm13 = Normal(apex1, apex3)
         self.norm23 = Normal(apex2, apex3)
-
-    def apexes(self):
-        """
-        Represent apexes of current triangle as list
-
-        Return
-        ------
-        apexes: list
-            list of apexes of triangle
-        """
-        return [self.apex1, self.apex2, self.apex3]
-
-    def normals(self):
-        """
-        Represent normals of current triangle as list
-
-        Return
-        ------
-        normals: list
-            list of normals of triangle
-        """
-        return [self.norm12, self.norm13, self.norm23]
+        self.apexes = [self.apex1, self.apex2, self.apex3]
+        self.normals = [self.norm12, self.norm13, self.norm23]
+        self.normalApexes = [[1, 2], [1, 3], [2, 3]]
 
     def getNormal(self, i, j):
         """
@@ -66,12 +47,9 @@ class Triangle:
         normal: Normal
             normal of triangle between apexes
         """
-        apex = self.apexes()
-        normal = self.normals()
-
         for k in range(3):
-            if normal[k] == Normal(apex[i], apex[j]):
-                return normal[k]
+            if self.normals[k] == Normal(self.apexes[i], self.apexes[j]):
+                return self.normals[k]
 
     def __repr__(self):
         return str(self.__dict__)

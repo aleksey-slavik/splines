@@ -1,3 +1,5 @@
+import sympy
+
 from edu.tomanova.splines.plate.Apex import Apex
 """
 Consist data of normal
@@ -36,6 +38,40 @@ class Normal:
             value of dn parameter for current normal
         """
         self.dn = dn
+
+    def delta(self, apex):
+        """
+        Represent delta(i,j,k)
+
+        Return
+        ------
+        det: expression
+            determinant of matrix delta(i,j,k)
+        """
+        matrix = sympy.Matrix(
+            [[self.apex1.x, self.apex1.y, 1],
+             [self.apex2.x, self.apex2.y, 1],
+             [apex.x, apex.y, 1]])
+
+        return matrix.det()
+
+    def sign(self, apex):
+        """
+        Represent direction of normal derivative depends on 3rd apex of triangle
+
+        Return
+        ------
+        value: int
+            direction of normal derivative
+        """
+        value = self.delta(apex)
+
+        if value > 0:
+            return 1
+        elif value < 0:
+            return -1
+        else:
+            return 0
 
     def __repr__(self):
         return str(self.__dict__)

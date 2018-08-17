@@ -25,6 +25,16 @@ class Spline:
         """
         self.triangle = triangle
 
+    def build(self):
+        spline = self.w()
+
+        for k in range(3):
+            i = self.triangle.normalApexes[k][0]
+            j = self.triangle.normalApexes[k][1]
+            spline += (self.triangle.normals[k].dn - self.dw(i, j)) * self.H(i, j)
+
+        return spline
+
     def h(self, k, b):
         """
         Create function h(x,y)
@@ -41,7 +51,7 @@ class Spline:
         result: expression
             function h(x,y)
         """
-        apex = self.triangle.apexes()
+        apex = self.triangle.apexes
         numb = [1, 2, 3]
         numb.remove(k)
         i = numb[0] - 1
@@ -112,7 +122,7 @@ class Spline:
         result: expression
             function w(x,y)
         """
-        apex = self.triangle.apexes()
+        apex = self.triangle.apexes
         result = 0
 
         for tr in range(3):
@@ -121,6 +131,19 @@ class Spline:
                     result += apex[tr].getParam(Derivative(m, n - m)) * self.h(tr + 1, Derivative(m, n - m))
 
         return result
+
+    def dw(self, i, j):
+        numb = [1, 2, 3]
+        numb.remove(i)
+        numb.remove(j)
+        i -= 1
+        j -= 1
+        k = numb[0] - 1
+        apex = self.triangle.apexes
+        normal = self.triangle.getNormal(i, j)
+        dw = normal.sign(apex[k]) / apex[i].distance(apex[j]) * (
+                (apex[i].y - apex[j].y) * sympy.diff(self.w(), x) + (apex[i].x - apex[j].x) * sympy.diff(self.w(), y))
+        return dw.subs({x: normal.point.x, y: normal.point.y})
 
     def H(self, i, j):
         """
@@ -138,46 +161,14 @@ class Spline:
         result: expression
             function H(x,y)
         """
-
-        apex = self.triangle.apexes()
         numb = [1, 2, 3]
         numb.remove(i)
         numb.remove(j)
         i -= 1
         j -= 1
         k = numb[0] - 1
-
-        def delta():
-            """
-            Represent delta(i,j,k)
-
-            Return:
-            det: expression
-                determinant of matrix delta(i,j,k)
-            """
-            matrix = sympy.Matrix(
-                [[apex[i].x, apex[i].y, 1],
-                 [apex[j].x, apex[j].y, 1],
-                 [apex[k].x, apex[k].y, 1]])
-
-            return matrix.det()
-
-        def sign():
-            """
-            Represent sign(delta(i,j,k))
-
-            Return:
-            value: int
-                signum of determinant of matrix delta(i,j,k)
-            """
-            value = delta()
-
-            if value > 0:
-                return 1
-            elif value < 0:
-                return -1
-            else:
-                return 0
+        apex = self.triangle.apexes
+        normal = self.triangle.getNormal(i, j)
 
         def omega(a, b):
             """
@@ -218,7 +209,7 @@ class Spline:
             det: float
                 determinant of matrix omega(x,y)
             """
-            return omega(a, b).subs({x: self.triangle.getNormal(i, j).point.x, y: self.triangle.getNormal(i, j).point.y})
+            return omega(a, b).subs({x: normal.point.x, y: normal.point.y})
 
-        return omega(i, k) ** 2 * omega(j, k) ** 2 * omega(i, j) * sign() / (
+        return omega(i, k) ** 2 * omega(j, k) ** 2 * omega(i, j) * normal.sign(apex[k]) / (
                     omegaSubs(i, k) ** 2 * omegaSubs(j, k) ** 2 * apex[i].distance(apex[j]))
