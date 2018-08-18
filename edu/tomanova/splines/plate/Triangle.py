@@ -1,3 +1,4 @@
+from edu.tomanova.splines.plate.Normal import Normal
 """
 Consist data of triangle
 
@@ -7,31 +8,51 @@ Consist data of triangle
 
 class Triangle:
 
-    def __init__(self, x1, y1, x2, y2, x3, y3):
+    def __init__(self, apex1, apex2, apex3):
         """
         Setup initial data
 
         Parameters
         ----------
-        x1: int
-            x coordinate of first axis
-        y1: int
-            y coordinate of first axis
-        x2: int
-            x coordinate of second axis
-        y2: int
-            y coordinate of second axis
-        x3: int
-            x coordinate of third axis
-        y3: int
-            y coordinate of third axis
+        apex1: Apex
+            first apex data
+        apex2: Apex
+            second apex data
+        apex3: Apex
+            third apex data
         """
-        self.x1 = x1
-        self.y1 = y1
-        self.x2 = x2
-        self.y2 = y2
-        self.x3 = x3
-        self.y3 = y3
+        self.apex1 = apex1
+        self.apex2 = apex2
+        self.apex3 = apex3
+        self.norm12 = Normal(apex1, apex2)
+        self.norm13 = Normal(apex1, apex3)
+        self.norm23 = Normal(apex2, apex3)
+        self.apexes = [self.apex1, self.apex2, self.apex3]
+        self.normals = [self.norm12, self.norm13, self.norm23]
+        self.normalApexes = [[1, 2], [1, 3], [2, 3]]
+
+    def getNormal(self, i, j):
+        """
+        Find normal by numbers of two apexes
+
+        Parameters
+        ----------
+        i: int
+            number of first apex
+        j: int
+            number of second apex
+
+        Return
+        ------
+        normal: Normal
+            normal of triangle between apexes
+        """
+        for k in range(3):
+            if self.normals[k] == Normal(self.apexes[i], self.apexes[j]):
+                return self.normals[k]
 
     def __repr__(self):
         return str(self.__dict__)
+
+    def __eq__(self, other):
+        return self.apex1 == other.apex1 and self.apex2 == other.apex2 and self.apex3 == other.apex3

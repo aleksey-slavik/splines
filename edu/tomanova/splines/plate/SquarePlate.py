@@ -7,25 +7,19 @@ Contains data of square plate
 
 class SquarePlate:
 
-    def __init__(self, x1, y1, x2, y2):
+    def __init__(self, apex1, apex2):
         """
         Setup initial data
 
         Parameters
         ----------
-        x1: float
-            left border
-        y1: float
-            bottom border
-        x2: float
-            right border
-        y2: float
-            top border
+        apex1: Apex
+            left bottom apex
+        apex1: Apex
+            right top apex
         """
-        self.x1 = x1
-        self.x2 = x2
-        self.y1 = y1
-        self.y2 = y2
+        self.apex1 = apex1
+        self.apex2 = apex2
 
     def __repr__(self):
         return str(self.__dict__)
