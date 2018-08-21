@@ -9,7 +9,7 @@ class Rule:
         self.normals = []
         self.count = 0
 
-    def setParams(self):
+    def setParams(self, dxxfOnly=(), dxyfOnly=(), dyyfOnly=(), excludeApex=(), excludeNormal=()):
         for i in range(len(self.triangles)):
             self.triangles[i].apex1 = self.getApex(self.triangles[i].apex1)
             self.triangles[i].apex2 = self.getApex(self.triangles[i].apex2)
@@ -29,48 +29,79 @@ class Rule:
                 self.normals[i] = -self.normals[i]
                 return self.normals[i]
 
-    def appendParams(self):
-        self.createApexList()
-        self.createNormalList()
-        self.appendApexParams()
-        self.appendNormalParams()
+    def appendParams(self, dxxfOnly=(), dxyfOnly=(), dyyfOnly=(), excludeApex=(), excludeNormal=()):
+        self.appendApexes(dxxfOnly, dxyfOnly, dyyfOnly, excludeApex)
+        self.createNormalList(excludeNormal)
 
-    def appendApexParams(self):
-        for i in range(len(self.apexes)):
-            self.count += 1
-            self.apexes[i].setF(sympy.symbols("p{0}".format(self.count)))
-            self.count += 1
-            self.apexes[i].setDxF(sympy.symbols("p{0}".format(self.count)))
-            self.count += 1
-            self.apexes[i].setDyF(sympy.symbols("p{0}".format(self.count)))
-            self.count += 1
-            self.apexes[i].setDxxF(sympy.symbols("p{0}".format(self.count)))
-            self.count += 1
-            self.apexes[i].setDxyF(sympy.symbols("p{0}".format(self.count)))
-            self.count += 1
-            self.apexes[i].setDyyF(sympy.symbols("p{0}".format(self.count)))
+    def appendApexDxxFOnly(self, apex):
+        self.count += 1
+        apex.setDxxF(sympy.symbols("p{0}".format(self.count)))
+        self.apexes.append(apex)
 
-    def appendNormalParams(self):
-        for i in range(len(self.normals)):
-            self.count += 1
-            self.normals[i].setDN(sympy.symbols("p{0}".format(self.count)))
+    def appendApexDxyFOnly(self, apex):
+        self.count += 1
+        apex.setDxyF(sympy.symbols("p{0}".format(self.count)))
+        self.apexes.append(apex)
 
-    def createApexList(self):
-        for i in range(len(self.triangles)):
+    def appendApexDyyFOnly(self, apex):
+        self.count += 1
+        apex.setDyyF(sympy.symbols("p{0}".format(self.count)))
+        self.apexes.append(apex)
+
+    def appendApex(self, apex):
+        self.count += 1
+        apex.setF(sympy.symbols("p{0}".format(self.count)))
+
+        self.count += 1
+        apex.setDxF(sympy.symbols("p{0}".format(self.count)))
+
+        self.count += 1
+        apex.setDyF(sympy.symbols("p{0}".format(self.count)))
+
+        self.count += 1
+        apex.setDxxF(sympy.symbols("p{0}".format(self.count)))
+
+        self.count += 1
+        apex.setDxyF(sympy.symbols("p{0}".format(self.count)))
+
+        self.count += 1
+        apex.setDyyF(sympy.symbols("p{0}".format(self.count)))
+
+        return self.apexes.append(apex)
+
+    def appendNormal(self, normal):
+        self.count += 1
+        normal.setDN(sympy.symbols("p{0}".format(self.count)))
+        self.normals.append(normal)
+
+    def appendApexes(self, dxxfOnly, dxyfOnly, dyyfOnly, excludeApex):
+        for i in self.triangles:
             apex = self.triangles[i].apexes
 
             for j in range(3):
-                if apex[j] not in self.apexes:
+                if apex[j] in dxxfOnly:
+                    self.appendApexDxxFOnly(apex[j])
+
+                elif apex[j] in dxyfOnly:
+                    self.appendApexDxyFOnly(apex[j])
+
+                elif apex[j] in dyyfOnly:
+                    self.appendApexDyyFOnly(apex[j])
+
+                elif apex[j] in excludeApex:
+                    self.appendApex(apex[j])
+
+                else:
                     self.apexes.append(apex[j])
 
-        return self.apexes
 
-    def createNormalList(self):
-        for i in range(len(self.triangles)):
+    def createNormalList(self, excludeNormal):
+        for i in self.triangles:
             norm = self.triangles[i].normals
 
             for j in range(3):
-                if norm[j] not in self.normals:
-                    self.normals.append(norm[j])
+                if norm[j] in excludeNormal:
+                    self.appendNormal(norm[j])
 
-        return self.normals
+                else:
+                    self.normals.append(norm[j])
