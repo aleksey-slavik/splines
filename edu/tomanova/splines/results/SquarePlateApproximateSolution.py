@@ -1,3 +1,4 @@
+from tomanova.splines.core.rule.SquarePlateRule import SquarePlateRule
 from edu.tomanova.splines.plate.Apex import Apex
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
 from edu.tomanova.splines.split.SquareSplitter import SquareSplitter
@@ -16,3 +17,6 @@ triangles = splitter.splitToTriangles(plate, 0)
 splitPlotData = splitter.plot(size=(10, 10))
 saveToFile(triangles, 'square', 'splitTo4Triangles')
 savePyPlotData(splitPlotData, 'square', 'splitTo4Triangles')
+rule = SquarePlateRule(plate, triangles)
+rule.setParams()
+print(rule.count)
