@@ -25,8 +25,11 @@ rule = SquarePlateRule(plate, triangles)
 rule.setParams()
 triangles = rule.triangles
 splines = []
+integrals = []
 for triangle in triangles:
-    splines.append(Spline(triangle))
-print(splines)
-#integral = Integrate(triangles, splines).integrate()
-#print(integral)
+    splineObj = Spline(triangle)
+    splineObj.build()
+    splines.append(splineObj.spline)
+    integral = Integrate(triangles, splineObj.spline).integrate()
+    integrals.append(integral)
+    print(integral)

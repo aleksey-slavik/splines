@@ -2,35 +2,56 @@ import sympy
 import math
 
 from edu.tomanova.splines.plate.Triangle import Triangle
-from edu.tomanova.splines.core.Derivative import Derivative
+"""
+Contains method for integration
+
+@author: iryna.tomanova 
+"""
 
 x, y = sympy.symbols(('x', 'y'))
 
 
 class Integrate:
 
-    def __init__(self, triangles, splines, q=1, count=3):
-        self.grid = triangles
-        self.splines = splines
-        self.q = q
+    def __init__(self, triangle, func, count=3):
+        """
+        Setup initial data
+
+        Parameters
+        ----------
+        triangle: Triangle
+            area of integration
+        func: expression
+            integrand
+        count: int
+            count of divide area of integration
+        """
+        self.grid = triangle
+        self.func = func
         self.count = count
         self.points = []
+        self.integral = 0
 
     def integrate(self):
-        res = 0
+        """
+        Integrate function
+        """
+        self.integral = 0
+        self.divideTriangles()
 
         for i in range(len(self.grid)):
             number = math.floor(i / math.pow(4, self.count))
-            value = (self.dS(Derivative(2, 0), number) + self.dS(Derivative(0, 2), number)) ** 2 - \
-                2 * self.q * self.splines[number]
-            p1 = value.subs({x: self.grid[i].norm12.point.x, y: self.grid[i].norm12.point.y})
-            p2 = value.subs({x: self.grid[i].norm23.point.x, y: self.grid[i].norm23.point.y})
-            p3 = value.subs({x: self.grid[i].norm13.point.x, y: self.grid[i].norm13.point.y})
-            res += (p1 + p2 + p3) * self.square(number) / 3
+            p1 = self.func.subs({x: self.grid[i].norm12.point.x, y: self.grid[i].norm12.point.y})
+            p2 = self.func.subs({x: self.grid[i].norm23.point.x, y: self.grid[i].norm23.point.y})
+            p3 = self.func.subs({x: self.grid[i].norm13.point.x, y: self.grid[i].norm13.point.y})
+            self.integral += (p1 + p2 + p3) * self.square(number) / 3
 
-        return res
+        return self.integral
 
     def divideTriangles(self):
+        """
+        Divide grid for integration
+        """
         triangles = self.grid
 
         for i in range(self.count):
@@ -46,15 +67,23 @@ class Integrate:
 
         self.grid = triangles
 
-    def dS(self, derivative, number):
-        return sympy.diff(self.splines[number], x, derivative.dx, y, derivative.dy)
-
     def p(self, number):
+        """
+        Additional function
+        """
         return (self.grid[number].apex1.distance(self.grid[number].apex2) +
                 self.grid[number].apex2.distance(self.grid[number].apex3) +
                 self.grid[number].apex1.distance(self.grid[number].apex3)) / 2
 
     def square(self, number):
+        """
+        Calculate square of given triangle
+
+        Parameters
+        ----------
+        number: int
+            number of triangle
+        """
         return sympy.sqrt(
             self.p(number) *
             (self.p(number) - self.grid[number].apex1.distance(self.grid[number].apex2)) *

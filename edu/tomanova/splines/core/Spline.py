@@ -24,6 +24,7 @@ class Spline:
             triangle, based on which spline was created
         """
         self.triangle = triangle
+        self.spline = 0
 
     def build(self):
         """
@@ -34,14 +35,15 @@ class Spline:
         spline: expression
             spline of 5th degree
         """
-        spline = self.w()
+        self.spline = 0
+        self.spline = self.w()
 
         for k in range(3):
             i = self.triangle.normalApexes[k][0]
             j = self.triangle.normalApexes[k][1]
-            spline += (self.triangle.getNormal(i - 1, j - 1).dn - self.dw(i, j)) * self.H(i, j)
+            self.spline += (self.triangle.getNormal(i - 1, j - 1).dn - self.dw(i, j)) * self.H(i, j)
 
-        return spline
+        return self.spline
 
     def h(self, k, b):
         """
