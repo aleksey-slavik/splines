@@ -30,6 +30,6 @@ for triangle in triangles:
     splineObj = Spline(triangle)
     splineObj.build()
     splines.append(splineObj.spline)
-    integral = Integrate(triangles, splineObj.spline).integrate()
+    integral = Integrate(triangle, splineObj.spline).integrate()
     integrals.append(integral)
     print(integral)

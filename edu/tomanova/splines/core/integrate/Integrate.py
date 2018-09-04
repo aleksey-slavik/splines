@@ -1,7 +1,8 @@
 import sympy
 import math
 
-from edu.tomanova.splines.plate.Triangle import Triangle
+from edu.tomanova.splines.core.integrate.Element import Element
+from edu.tomanova.splines.core.integrate.Point import Point
 """
 Contains method for integration
 
@@ -26,7 +27,12 @@ class Integrate:
         count: int
             count of divide area of integration
         """
-        self.grid = triangle
+        self.grid = []
+        self.grid.append(
+            Element(
+                Point(triangle.apex1.x, triangle.apex1.y),
+                Point(triangle.apex2.x, triangle.apex2.y),
+                Point(triangle.apex3.x, triangle.apex3.y)))
         self.func = func
         self.count = count
         self.points = []
@@ -41,9 +47,9 @@ class Integrate:
 
         for i in range(len(self.grid)):
             number = math.floor(i / math.pow(4, self.count))
-            p1 = self.func.subs({x: self.grid[i].norm12.point.x, y: self.grid[i].norm12.point.y})
-            p2 = self.func.subs({x: self.grid[i].norm23.point.x, y: self.grid[i].norm23.point.y})
-            p3 = self.func.subs({x: self.grid[i].norm13.point.x, y: self.grid[i].norm13.point.y})
+            p1 = self.func.subs({x: self.grid[i].middle12.x, y: self.grid[i].middle12.y})
+            p2 = self.func.subs({x: self.grid[i].middle23.x, y: self.grid[i].middle23.y})
+            p3 = self.func.subs({x: self.grid[i].middle13.x, y: self.grid[i].middle13.y})
             self.integral += (p1 + p2 + p3) * self.square(number) / 3
 
         return self.integral
@@ -52,28 +58,44 @@ class Integrate:
         """
         Divide grid for integration
         """
-        triangles = self.grid
+        elements = self.grid
 
         for i in range(self.count):
             temp = []
 
-            for triangle in triangles:
-                temp.append(Triangle(triangle.apex1, triangle.norm12.point, triangle.norm13.point))
-                temp.append(Triangle(triangle.norm12.point, triangle.norm13.point, triangle.norm23.point))
-                temp.append(Triangle(triangle.norm12.point, triangle.apex2, triangle.norm23.point))
-                temp.append(Triangle(triangle.norm23.point, triangle.norm13.point, triangle.apex3))
+            for element in elements:
+                temp.append(
+                    Element(
+                        element.point1,
+                        element.middle12,
+                        element.middle13))
+                temp.append(
+                    Element(
+                        element.middle12,
+                        element.middle13,
+                        element.middle23))
+                temp.append(
+                    Element(
+                        element.middle12,
+                        element.point2,
+                        element.middle23))
+                temp.append(
+                    Element(
+                        element.middle23,
+                        element.middle13,
+                        element.point3))
 
-            triangles = temp
+            elements = temp
 
-        self.grid = triangles
+        self.grid = elements
 
     def p(self, number):
         """
         Additional function
         """
-        return (self.grid[number].apex1.distance(self.grid[number].apex2) +
-                self.grid[number].apex2.distance(self.grid[number].apex3) +
-                self.grid[number].apex1.distance(self.grid[number].apex3)) / 2
+        return (self.grid[number].point1.distance(self.grid[number].point2) +
+                self.grid[number].point2.distance(self.grid[number].point3) +
+                self.grid[number].point1.distance(self.grid[number].point3)) / 2
 
     def square(self, number):
         """
@@ -86,6 +108,6 @@ class Integrate:
         """
         return sympy.sqrt(
             self.p(number) *
-            (self.p(number) - self.grid[number].apex1.distance(self.grid[number].apex2)) *
-            (self.p(number) - self.grid[number].apex2.distance(self.grid[number].apex3)) *
-            (self.p(number) - self.grid[number].apex1.distance(self.grid[number].apex3)))
+            (self.p(number) - self.grid[number].point1.distance(self.grid[number].point2)) *
+            (self.p(number) - self.grid[number].point2.distance(self.grid[number].point3)) *
+            (self.p(number) - self.grid[number].point1.distance(self.grid[number].point3)))
