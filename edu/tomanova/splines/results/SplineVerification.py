@@ -1,7 +1,7 @@
 import sympy
 
 from math import factorial
-from edu.tomanova.splines.core.Spline import Spline
+from edu.tomanova.splines.core.SplineBuilder import SplineBuilder
 from edu.tomanova.splines.core.Derivative import Derivative
 from edu.tomanova.splines.plate.Triangle import Triangle
 from edu.tomanova.splines.plate.Apex import Apex
@@ -131,7 +131,7 @@ triangle.norm12.dn = Dn12(f)
 triangle.norm23.dn = Dn23(f)
 triangle.norm13.dn = Dn13(f)
 
-spline = Spline(triangle)
+spline = SplineBuilder(triangle)
 
 print("h(1,0,0) = {0}".format(spline.h(1, Derivative(0, 0))))
 print("h(1,1,0) = {0}".format(spline.h(1, Derivative(1, 0))))
