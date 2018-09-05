@@ -44,27 +44,11 @@ class Integrate:
         self.integral = 0
         self.divideTriangles()
 
-        def square(triangle):
-            """
-            Using Heron's formula calculate square of triangle
-
-            Parameters
-            ----------
-            triangle: Element
-                given triangle
-            """
-            a = triangle.point1.distance(triangle.point2)
-            b = triangle.point1.distance(triangle.point3)
-            c = triangle.point2.distance(triangle.point3)
-            p = (a + b + c) / 2
-
-            return sympy.sqrt(p * (p - a) * (p - b) * (p - c))
-
         for element in self.grid:
             P1 = self.func.subs({x: element.middle12.x, y: element.middle12.y})
             P2 = self.func.subs({x: element.middle23.x, y: element.middle23.y})
             P3 = self.func.subs({x: element.middle13.x, y: element.middle13.y})
-            self.integral += (P1 + P2 + P3) * square(element) / 3
+            self.integral += (P1 + P2 + P3) * element.square() / 3
 
         return self.integral
 

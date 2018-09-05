@@ -1,13 +1,11 @@
-import sympy
-
 from edu.tomanova.splines.core.rule.SquarePlateRule import SquarePlateRule
 from edu.tomanova.splines.core.Solver import Solver
 
 from edu.tomanova.splines.plate.Apex import Apex
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
 from edu.tomanova.splines.split.SquareSplitter import SquareSplitter
-from edu.tomanova.splines.utils.DataHelper import saveToFile
-from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
+#from edu.tomanova.splines.utils.DataHelper import saveToFile
+#from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
 """
 Contains approximate solution of biharmonic equation for square plate with dimensions (-0.5, -0.5, 0.5, 0.5)
 
