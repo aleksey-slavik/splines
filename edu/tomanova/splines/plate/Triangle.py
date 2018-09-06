@@ -1,4 +1,7 @@
+import math
+
 from edu.tomanova.splines.plate.Normal import Normal
+
 """
 Consist data of triangle
 
@@ -51,8 +54,71 @@ class Triangle:
             if self.normals[k] == Normal(self.apexes[i], self.apexes[j]):
                 return self.normals[k]
 
+    def checkPoint(self, apex):
+        """
+        Check belong given point to current triangle or not
+
+        Parameters
+        ----------
+        apex: Apex
+            given point
+        """
+        def square(apex1, apex2):
+            """
+            Using Heron's formula calculate square of partial triangle
+            """
+            a = apex.distance(apex1)
+            b = apex.distance(apex2)
+            c = apex1.distance(apex2)
+            p = (a + b + c) / 2
+
+            return math.sqrt(p * (p - a) * (p - b) * (p - c))
+
+        s12 = square(self.apex1, self.apex2)
+        s13 = square(self.apex1, self.apex3)
+        s23 = square(self.apex2, self.apex3)
+
+        print(s12, s13, s23, self.square())
+
+        if s12 + s13 + s23 > self.square():
+            return False
+        else:
+            return True
+
+    def square(self):
+        """
+        Using Heron's formula calculate square of current triangle
+        """
+        a = self.apex1.distance(self.apex2)
+        b = self.apex1.distance(self.apex3)
+        c = self.apex2.distance(self.apex3)
+        p = (a + b + c) / 2
+
+        return math.sqrt(p * (p - a) * (p - b) * (p - c))
+
+    def minX(self):
+        return min(self.apex1.x, self.apex2.x, self.apex3.x)
+
+    def maxX(self):
+        return max(self.apex1.x, self.apex2.x, self.apex3.x)
+
+    def minY(self):
+        return min(self.apex1.y, self.apex2.y, self.apex3.y)
+
+    def maxY(self):
+        return max(self.apex1.y, self.apex2.y, self.apex3.y)
+
     def __repr__(self):
         return str(self.__dict__)
 
     def __eq__(self, other):
         return self.apex1 == other.apex1 and self.apex2 == other.apex2 and self.apex3 == other.apex3
+
+from edu.tomanova.splines.plate.Apex import Apex
+tr = Triangle(Apex(0,0),Apex(1,0), Apex(0,1))
+print(tr.checkPoint(Apex(0,0)))
+print(tr.checkPoint(Apex(0,1)))
+print(tr.checkPoint(Apex(1,0)))
+print(tr.checkPoint(Apex(0.1,0.5)))
+print(tr.checkPoint(Apex(0.5,0.5)))
+print(tr.checkPoint(Apex(1,1)))

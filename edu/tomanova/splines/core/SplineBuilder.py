@@ -1,7 +1,12 @@
 import sympy
+import numpy
+import pylab
+import matplotlib.pyplot as pyplot
 
 from math import factorial
+from matplotlib import cm
 from edu.tomanova.splines.core.Derivative import Derivative
+from edu.tomanova.splines.plate.Apex import Apex
 
 """
 Contains spline of 5th degree
@@ -44,6 +49,25 @@ class SplineBuilder:
             self.spline += (self.triangle.getNormal(i - 1, j - 1).dn - self.dw(i, j)) * self.H(i, j)
 
         return self.spline
+
+    def plot3d(self, delta=0.1):
+        def plotFunction(p1, p2):
+            apex = Apex(p1, p2)
+            if self.triangle.checkPoint(apex):
+                return self.spline.subs({x: apex.x, y: apex.y})
+            else:
+                return 0
+
+        arrangeX = numpy.arange(self.triangle.minX(), self.triangle.maxX(), delta)
+        arrangeY = numpy.arange(self.triangle.minY(), self.triangle.maxY(), delta)
+        meshX, meshY = pylab.meshgrid(arrangeX, arrangeY)
+        meshZ = plotFunction(meshX, meshY)
+        figure = pyplot.figure()
+        axes = figure.gca(projection='3d')
+        surface = axes.plot_surface(meshX, meshY, meshZ,
+                                    rstride=1, cstride=1, cmap=cm.RdBu, linewidth=0, antialiased=False)
+        figure.colorbar(surface, shrink=0.5, aspect=5)
+        pyplot.show()
 
     def h(self, k, b):
         """
