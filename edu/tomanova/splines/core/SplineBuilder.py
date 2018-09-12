@@ -12,7 +12,7 @@ Contains spline of 5th degree
 x, y = sympy.symbols(('x', 'y'))
 
 
-class Spline:
+class SplineBuilder:
 
     def __init__(self, triangle):
         """

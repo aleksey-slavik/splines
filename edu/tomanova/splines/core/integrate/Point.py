@@ -37,3 +37,9 @@ class Point:
             distance between points
         """
         return sympy.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y

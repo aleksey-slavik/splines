@@ -1,4 +1,7 @@
+import math
+
 from edu.tomanova.splines.plate.Normal import Normal
+
 """
 Consist data of triangle
 
@@ -50,6 +53,29 @@ class Triangle:
         for k in range(3):
             if self.normals[k] == Normal(self.apexes[i], self.apexes[j]):
                 return self.normals[k]
+
+    def square(self):
+        """
+        Using Heron's formula calculate square of current triangle
+        """
+        a = self.apex1.distance(self.apex2)
+        b = self.apex1.distance(self.apex3)
+        c = self.apex2.distance(self.apex3)
+        p = (a + b + c) / 2
+
+        return math.sqrt(p * (p - a) * (p - b) * (p - c))
+
+    def minX(self):
+        return min(self.apex1.x, self.apex2.x, self.apex3.x)
+
+    def maxX(self):
+        return max(self.apex1.x, self.apex2.x, self.apex3.x)
+
+    def minY(self):
+        return min(self.apex1.y, self.apex2.y, self.apex3.y)
+
+    def maxY(self):
+        return max(self.apex1.y, self.apex2.y, self.apex3.y)
 
     def __repr__(self):
         return str(self.__dict__)

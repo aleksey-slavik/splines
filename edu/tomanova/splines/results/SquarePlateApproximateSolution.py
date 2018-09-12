@@ -1,13 +1,11 @@
-import sympy
-
 from edu.tomanova.splines.core.rule.SquarePlateRule import SquarePlateRule
-from edu.tomanova.splines.core.integrate.Integrate import Integrate
-from edu.tomanova.splines.core.Spline import Spline
+from edu.tomanova.splines.core.Solver import Solver
+
 from edu.tomanova.splines.plate.Apex import Apex
 from edu.tomanova.splines.plate.SquarePlate import SquarePlate
 from edu.tomanova.splines.split.SquareSplitter import SquareSplitter
-from edu.tomanova.splines.utils.DataHelper import saveToFile
-from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
+#from edu.tomanova.splines.utils.DataHelper import saveToFile
+#from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
 """
 Contains approximate solution of biharmonic equation for square plate with dimensions (-0.5, -0.5, 0.5, 0.5)
 
@@ -22,14 +20,6 @@ triangles = splitter.splitToTriangles(plate, 0)
 #saveToFile(triangles, 'square', 'splitTo4Triangles')
 #savePyPlotData(splitPlotData, 'square', 'splitTo4Triangles')
 rule = SquarePlateRule(plate, triangles)
-rule.setParams()
-triangles = rule.triangles
-splines = []
-integrals = []
-for triangle in triangles:
-    splineObj = Spline(triangle)
-    splineObj.build()
-    splines.append(splineObj.spline)
-    integral = Integrate(triangle, splineObj.spline).integrate()
-    integrals.append(integral)
-    print(integral)
+solver = Solver(rule)
+solver.solve()
+print(solver.splines)

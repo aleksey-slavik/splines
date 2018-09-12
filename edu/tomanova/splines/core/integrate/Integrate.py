@@ -1,5 +1,4 @@
 import sympy
-import math
 
 from edu.tomanova.splines.core.integrate.Element import Element
 from edu.tomanova.splines.core.integrate.Point import Point
@@ -45,18 +44,17 @@ class Integrate:
         self.integral = 0
         self.divideTriangles()
 
-        for i in range(len(self.grid)):
-            number = math.floor(i / math.pow(4, self.count))
-            p1 = self.func.subs({x: self.grid[i].middle12.x, y: self.grid[i].middle12.y})
-            p2 = self.func.subs({x: self.grid[i].middle23.x, y: self.grid[i].middle23.y})
-            p3 = self.func.subs({x: self.grid[i].middle13.x, y: self.grid[i].middle13.y})
-            self.integral += (p1 + p2 + p3) * self.square(number) / 3
+        for element in self.grid:
+            P1 = self.func.subs({x: element.middle12.x, y: element.middle12.y})
+            P2 = self.func.subs({x: element.middle23.x, y: element.middle23.y})
+            P3 = self.func.subs({x: element.middle13.x, y: element.middle13.y})
+            self.integral += (P1 + P2 + P3) * element.square() / 3
 
         return self.integral
 
     def divideTriangles(self):
         """
-        Divide grid for integration
+        Divide area for integration
         """
         elements = self.grid
 
@@ -88,26 +86,3 @@ class Integrate:
             elements = temp
 
         self.grid = elements
-
-    def p(self, number):
-        """
-        Additional function
-        """
-        return (self.grid[number].point1.distance(self.grid[number].point2) +
-                self.grid[number].point2.distance(self.grid[number].point3) +
-                self.grid[number].point1.distance(self.grid[number].point3)) / 2
-
-    def square(self, number):
-        """
-        Calculate square of given triangle
-
-        Parameters
-        ----------
-        number: int
-            number of triangle
-        """
-        return sympy.sqrt(
-            self.p(number) *
-            (self.p(number) - self.grid[number].point1.distance(self.grid[number].point2)) *
-            (self.p(number) - self.grid[number].point2.distance(self.grid[number].point3)) *
-            (self.p(number) - self.grid[number].point1.distance(self.grid[number].point3)))
