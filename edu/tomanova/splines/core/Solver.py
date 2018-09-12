@@ -2,6 +2,8 @@ import sympy
 
 from edu.tomanova.splines.core.SplineBuilder import SplineBuilder
 from edu.tomanova.splines.core.integrate.Integrate import Integrate
+from tomanova.splines.core.rule.Rule import Rule
+
 """
 Contains function for solve system of equations for find parameters of spline
 
@@ -26,7 +28,6 @@ class Solver:
         """
         self.q = q
         self.rule = rule
-        self.rule.setParams()
         self.splines = []
 
     def solve(self):

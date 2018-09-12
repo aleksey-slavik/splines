@@ -1,4 +1,5 @@
 import sympy
+import copy
 
 """
 Contains rules for set parameters for apexes and normals
@@ -43,14 +44,19 @@ class Rule:
         Set parameters for triangles
         """
         self.appendParams()
+        updated = []
 
-        for i in range(len(self.triangles)):
-            self.triangles[i].apex1 = self.getApex(self.triangles[i].apex1)
-            self.triangles[i].apex2 = self.getApex(self.triangles[i].apex2)
-            self.triangles[i].apex3 = self.getApex(self.triangles[i].apex3)
-            self.triangles[i].norm12 = self.getNorm(self.triangles[i].norm12)
-            self.triangles[i].norm13 = self.getNorm(self.triangles[i].norm13)
-            self.triangles[i].norm23 = self.getNorm(self.triangles[i].norm23)
+        for triangle in self.triangles:
+            triangle.apex1 = self.getApex(triangle.apex1)
+            triangle.apex2 = self.getApex(triangle.apex2)
+            triangle.apex3 = self.getApex(triangle.apex3)
+            triangle.norm12 = copy.copy(self.getNorm(triangle.norm12))
+            triangle.norm13 = copy.copy(self.getNorm(triangle.norm13))
+            triangle.norm23 = copy.copy(self.getNorm(triangle.norm23))
+            updated.append(triangle)
+
+        self.triangles = []
+        self.triangles = updated
 
     def appendParams(self):
         """
@@ -183,13 +189,13 @@ class Rule:
                 else:
                     self.appendNormal(normals[j])
 
-    def getApex(self, apex):
+    def getApex(self, ap):
         """
         Find given apex in list of apexes
 
         Parameters
         ----------
-        apex: Apex
+        ap: Apex
             given apex
 
         Return
@@ -197,9 +203,9 @@ class Rule:
         apex: Apex
             apex from list
         """
-        for i in range(len(self.apexes)):
-            if self.apexes[i] == apex:
-                return self.apexes[i]
+        for apex in self.apexes:
+            if apex == ap:
+                return apex
 
     def getNorm(self, norm):
         """
@@ -212,10 +218,11 @@ class Rule:
 
         Return
         ------
-        norm: Normal
+        normal: Normal
             normal from list
         """
-        for i in range(len(self.normals)):
-            if self.normals[i] == norm:
-                self.normals[i].setDN = -self.normals[i].dn
-                return self.normals[i]
+        for normal in self.normals:
+            if normal == norm:
+                index = self.normals.index(normal)
+                self.normals[index].changeDirection()
+                return normal
