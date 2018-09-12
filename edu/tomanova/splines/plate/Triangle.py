@@ -78,7 +78,8 @@ class Triangle:
         return max(self.apex1.y, self.apex2.y, self.apex3.y)
 
     def __repr__(self):
-        return str(self.__dict__)
+        return "apex1: {0},\napex2: {1},\napex3: {2},\nnorm12: {3},\nnorm23: {4},\nnorm13: {5}"\
+            .format(self.apex1, self.apex2, self.apex3, self.norm12, self.norm23, self.norm13)
 
     def __eq__(self, other):
         return self.apex1 == other.apex1 and self.apex2 == other.apex2 and self.apex3 == other.apex3

@@ -166,7 +166,8 @@ class Apex:
         return sympy.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
 
     def __repr__(self):
-        return str(self.__dict__)
+        return "x: {0}, y: {1}, f: {2}, dxf: {3}, dyf: {4}, dxxf: {5}, dxyf: {6}, dyyf: {7}"\
+            .format(self.x, self.y, self.f, self.dxf, self.dyf, self.dxxf, self.dxyf, self.dyyf)
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y

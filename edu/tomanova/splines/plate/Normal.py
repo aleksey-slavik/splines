@@ -28,6 +28,9 @@ class Normal:
             (apex1.y + apex2.y) / 2)
         self.dn = 0
 
+    def getDN(self):
+        return self.dn
+
     def setDN(self, dn):
         """
         Change value of dn parameter for current normal
@@ -73,8 +76,11 @@ class Normal:
         else:
             return 0
 
+    def changeDirection(self):
+        self.dn *= -1
+
     def __repr__(self):
-        return str(self.__dict__)
+        return "x: {0}, y: {1}, dn: {2}".format(self.point.x, self.point.y, self.dn)
 
     def __eq__(self, other):
         return self.point == other.point
