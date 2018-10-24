@@ -29,6 +29,14 @@ class Normal:
         self.dn = 0
 
     def getDN(self):
+        """
+        Return value dn for current normal
+
+        Return
+        ------
+        dn: float
+             value of dn parameter for current normal
+        """
         return self.dn
 
     def setDN(self, dn):
