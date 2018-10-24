@@ -2,7 +2,7 @@ import sympy
 
 from edu.tomanova.splines.core.SplineBuilder import SplineBuilder
 from edu.tomanova.splines.core.integrate.Integrate import Integrate
-from tomanova.splines.core.rule.Rule import Rule
+from edu.tomanova.splines.core.rule.Rule import Rule
 
 """
 Contains function for solve system of equations for find parameters of spline
@@ -37,10 +37,10 @@ class Solver:
         integral = 0
 
         for triangle in self.rule.triangles:
-            splineBuilder = SplineBuilder(triangle)
-            splineBuilder.build()
-            self.splines.append(splineBuilder.spline)
-            integral += Integrate(triangle, self.integrand(splineBuilder.spline)).integrate()
+            tmpSpline = SplineBuilder(triangle).build()
+            self.splines.append(tmpSpline)
+            tmpIntegral = Integrate(triangle, self.integrand(tmpSpline)).integrate()
+            integral += tmpIntegral
 
         system = self.system(integral)
         params = sympy.symbols("p1:{0}".format(self.rule.count + 1))
