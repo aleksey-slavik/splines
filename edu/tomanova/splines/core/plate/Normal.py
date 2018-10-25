@@ -1,6 +1,6 @@
 import sympy
 
-from edu.tomanova.splines.plate.Apex import Apex
+from tomanova.splines.core.plate.Apex import Apex
 """
 Consist data of normal
 

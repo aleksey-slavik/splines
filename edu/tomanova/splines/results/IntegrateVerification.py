@@ -1,7 +1,7 @@
 import sympy
 
-from edu.tomanova.splines.plate.Apex import Apex
-from edu.tomanova.splines.plate.Triangle import Triangle
+from tomanova.splines.core.plate.Apex import Apex
+from tomanova.splines.core.plate.Triangle import Triangle
 from edu.tomanova.splines.core.integrate.Integrate import Integrate
 """
 Contains verification of integration function

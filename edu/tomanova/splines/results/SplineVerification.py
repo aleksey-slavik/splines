@@ -3,8 +3,8 @@ import sympy
 from math import factorial
 from edu.tomanova.splines.core.SplineBuilder import SplineBuilder
 from edu.tomanova.splines.core.Derivative import Derivative
-from edu.tomanova.splines.plate.Triangle import Triangle
-from edu.tomanova.splines.plate.Apex import Apex
+from tomanova.splines.core.plate.Triangle import Triangle
+from tomanova.splines.core.plate.Apex import Apex
 
 """
 Contains verification of properties of spline of 5th degree 

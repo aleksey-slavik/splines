@@ -1,7 +1,7 @@
-from edu.tomanova.splines.plate.Apex import Apex
-from edu.tomanova.splines.plate.Triangle import Triangle
-from edu.tomanova.splines.split.Splitter import Splitter
-from edu.tomanova.splines.plate.SquarePlate import SquarePlate
+from tomanova.splines.core.plate.Apex import Apex
+from tomanova.splines.core.plate.Triangle import Triangle
+from tomanova.splines.core.split import Splitter
+from tomanova.splines.core.plate.SquarePlate import SquarePlate
 
 """
 Contains methods for split square areas

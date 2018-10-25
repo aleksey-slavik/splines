@@ -1,6 +1,6 @@
 import math
 
-from edu.tomanova.splines.plate.Normal import Normal
+from tomanova.splines.core.plate.Normal import Normal
 
 """
 Consist data of triangle
