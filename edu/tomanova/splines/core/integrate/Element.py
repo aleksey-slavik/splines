@@ -1,6 +1,6 @@
 import sympy
 
-from edu.tomanova.splines.core.integrate.Point import Point
+from edu.tomanova.splines.core.plate.Point import Point
 
 """
 Represent a triangle element of integration grid

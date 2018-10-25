@@ -1,7 +1,7 @@
 import sympy
 
 from edu.tomanova.splines.core.integrate.Element import Element
-from edu.tomanova.splines.core.integrate.Point import Point
+from edu.tomanova.splines.core.plate.Point import Point
 """
 Contains method for integration
 
