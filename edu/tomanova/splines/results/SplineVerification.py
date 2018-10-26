@@ -63,7 +63,7 @@ def Dn12(func):
         value of derivative of given function
     """
     value = sympy.diff(func, y)
-    return value.subs({x: triangle.norm12.point.x, y: triangle.norm12.point.y})
+    return value.subs({x: triangle.norm12.x, y: triangle.norm12.y})
 
 
 def Dn23(func):
@@ -81,7 +81,7 @@ def Dn23(func):
         value of derivative of given function
     """
     value = (-1 / sympy.sqrt(2)) * (sympy.diff(func, x) + sympy.diff(func, y))
-    return value.subs({x: triangle.norm23.point.x, y: triangle.norm23.point.y})
+    return value.subs({x: triangle.norm23.x, y: triangle.norm23.y})
 
 
 def Dn13(func):
@@ -99,7 +99,7 @@ def Dn13(func):
         value of derivative of given function
     """
     value = sympy.diff(func, x)
-    return value.subs({x: triangle.norm13.point.x, y: triangle.norm13.point.y})
+    return value.subs({x: triangle.norm13.x, y: triangle.norm13.y})
 
 
 apex1 = Apex(0, 0)
@@ -215,7 +215,7 @@ for tr in range(3):
 
     print("|{0}|({1}, {2})|{3}   |{4}   |{5}   |".format(
         alias[tr],
-        triangle.normals[tr].point.x, triangle.normals[tr].point.y,
+        triangle.normals[tr].x, triangle.normals[tr].y,
         dn12, dn13, dn23
     ))
 
@@ -267,7 +267,7 @@ listS = [Dn12(f) - Dn12(S), Dn13(f) - Dn13(S), Dn23(f) - Dn23(S)]
 
 for tr in range(3):
     print("|({0},{1})|{2}     |".format(
-        triangle.normals[tr].point.x, triangle.normals[tr].point.y,
+        triangle.normals[tr].x, triangle.normals[tr].y,
         listS[tr]))
 
     print('------------------')
