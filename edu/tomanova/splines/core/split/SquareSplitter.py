@@ -1,7 +1,7 @@
-from tomanova.splines.core.plate.Apex import Apex
-from tomanova.splines.core.plate.Triangle import Triangle
-from tomanova.splines.core.split import Splitter
-from tomanova.splines.core.plate.SquarePlate import SquarePlate
+from edu.tomanova.splines.core.plate.Apex import Apex
+from edu.tomanova.splines.core.plate.Triangle import Triangle
+from edu.tomanova.splines.core.split import Splitter
+from edu.tomanova.splines.core.plate.SquarePlate import SquarePlate
 
 """
 Contains methods for split square areas
@@ -11,6 +11,9 @@ Contains methods for split square areas
 
 
 class SquareSplitter(Splitter):
+
+    def __init__(self):
+        super().__init__()
 
     def splitToTriangles(self, plate, count):
         """

@@ -2,9 +2,9 @@ import sympy
 
 from edu.tomanova.splines.core.rule.SquarePlateRule import SquarePlateRule
 from edu.tomanova.splines.core.Solver import Solver
-from tomanova.splines.core.plate.Apex import Apex
-from tomanova.splines.core.plate.SquarePlate import SquarePlate
-from tomanova.splines.core.split import SquareSplitter
+from edu.tomanova.splines.core.plate.Apex import Apex
+from edu.tomanova.splines.core.plate.SquarePlate import SquarePlate
+from edu.tomanova.splines.core.split import SquareSplitter
 #from edu.tomanova.splines.utils.DataHelper import saveToFile
 #from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
 """
