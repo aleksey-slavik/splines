@@ -1,6 +1,8 @@
 import sympy
 
 from edu.tomanova.splines.core.Derivative import Derivative
+from edu.tomanova.splines.core.plate.Point import Point
+
 """
 Consist data of apex
 
@@ -8,7 +10,7 @@ Consist data of apex
 """
 
 
-class Apex:
+class Apex(Point):
 
     def __init__(self, x, y):
         """
@@ -21,8 +23,7 @@ class Apex:
         y: float
             y coordinate of  apex
         """
-        self.x = x
-        self.y = y
+        super().__init__(x, y)
         self.f = 0
         self.dxf = 0
         self.dyf = 0
@@ -170,4 +171,4 @@ class Apex:
             .format(self.x, self.y, self.f, self.dxf, self.dyf, self.dxxf, self.dxyf, self.dyyf)
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        return super().__eq__(other)

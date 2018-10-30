@@ -168,7 +168,7 @@ class SplineBuilder:
         normal = self.triangle.getNormal(i, j)
         dw = normal.sign(apex[k]) / apex[i].distance(apex[j]) * (
                 (apex[i].y - apex[j].y) * sympy.diff(self.w(), x) - (apex[i].x - apex[j].x) * sympy.diff(self.w(), y))
-        return dw.subs({x: normal.point.x, y: normal.point.y})
+        return dw.subs({x: normal.x, y: normal.y})
 
     def H(self, i, j):
         """
@@ -234,7 +234,7 @@ class SplineBuilder:
             det: float
                 determinant of matrix omega(x,y)
             """
-            return omega(a, b).subs({x: normal.point.x, y: normal.point.y})
+            return omega(a, b).subs({x: normal.x, y: normal.y})
 
         return omega(i, k) ** 2 * omega(j, k) ** 2 * omega(i, j) * normal.sign(apex[k]) / (
                     omegaSubs(i, k) ** 2 * omegaSubs(j, k) ** 2 * apex[i].distance(apex[j]))

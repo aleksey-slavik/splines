@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from edu.tomanova.splines.utils.DataHelper import loadFromFile
 """
 Contains methods for split area and plot triangulation
 
@@ -9,25 +8,8 @@ Contains methods for split area and plot triangulation
 
 class Splitter:
 
-    def fromFile(self, directoryName, fileName):
-        """
-        Get triangulation saved in file
-        File must consist list of Triangle objects
-
-        Parameters
-        ----------
-        directoryName: str
-            directory name
-        fileName: str
-            file name
-
-        Return
-        ------
-        triangles: list
-            list of triangles
-        """
-        self.triangles = loadFromFile(directoryName, fileName)
-        return self.triangles
+    def __init__(self):
+        self.triangles = []
 
     def plot(self, size=(12, 9)):
         """

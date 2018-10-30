@@ -1,6 +1,8 @@
 import sympy
 
-from edu.tomanova.splines.plate.Apex import Apex
+from tomanova.splines.core.plate.Apex import Apex
+from edu.tomanova.splines.core.plate.Point import Point
+
 """
 Consist data of normal
 
@@ -8,7 +10,7 @@ Consist data of normal
 """
 
 
-class Normal:
+class Normal(Point):
 
     def __init__(self, apex1, apex2):
         """
@@ -21,14 +23,22 @@ class Normal:
         apex2: Apex
             right point of line segment
         """
-        self.apex1 = apex1
-        self.apex2 = apex2
-        self.point = Apex(
+        super().__init__(
             (apex1.x + apex2.x) / 2,
             (apex1.y + apex2.y) / 2)
+        self.apex1 = apex1
+        self.apex2 = apex2
         self.dn = 0
 
     def getDN(self):
+        """
+        Return value dn for current normal
+
+        Return
+        ------
+        dn: float
+             value of dn parameter for current normal
+        """
         return self.dn
 
     def setDN(self, dn):
@@ -80,7 +90,7 @@ class Normal:
         self.dn *= -1
 
     def __repr__(self):
-        return "x: {0}, y: {1}, dn: {2}".format(self.point.x, self.point.y, self.dn)
+        return "x: {0}, y: {1}, dn: {2}".format(self.x, self.y, self.dn)
 
     def __eq__(self, other):
-        return self.point == other.point
+        return super().__eq__(other)

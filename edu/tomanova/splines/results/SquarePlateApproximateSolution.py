@@ -2,9 +2,9 @@ import sympy
 
 from edu.tomanova.splines.core.rule.SquarePlateRule import SquarePlateRule
 from edu.tomanova.splines.core.Solver import Solver
-from edu.tomanova.splines.plate.Apex import Apex
-from edu.tomanova.splines.plate.SquarePlate import SquarePlate
-from edu.tomanova.splines.split.SquareSplitter import SquareSplitter
+from edu.tomanova.splines.core.plate.Apex import Apex
+from edu.tomanova.splines.core.plate.SquarePlate import SquarePlate
+from edu.tomanova.splines.core.split import SquareSplitter
 #from edu.tomanova.splines.utils.DataHelper import saveToFile
 #from edu.tomanova.splines.utils.ImageHelper import savePyPlotData
 """
@@ -23,8 +23,8 @@ triangles = splitter.splitToTriangles(plate, 0)
 rule = SquarePlateRule(plate, triangles)
 rule.setParams()
 solver = Solver(rule)
-#solver.solve()
-#print(solver.splines[0].subs({x: 0, y: 0}))
-#print(solver.splines[1].subs({x: 0, y: 0}))
-#print(solver.splines[2].subs({x: 0, y: 0}))
-#print(solver.splines[3].subs({x: 0, y: 0}))
+solver.solve()
+print(solver.splines[0].subs({x: 0, y: 0}))
+print(solver.splines[1].subs({x: 0, y: 0}))
+print(solver.splines[2].subs({x: 0, y: 0}))
+print(solver.splines[3].subs({x: 0, y: 0}))

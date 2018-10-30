@@ -1,5 +1,5 @@
 from edu.tomanova.splines.core.rule.Rule import Rule
-from edu.tomanova.splines.plate.Apex import Apex
+from tomanova.splines.core.plate.Apex import Apex
 """
 Implementation of Rule.
 Contains rules for set parameters for apexes and normals for square plate

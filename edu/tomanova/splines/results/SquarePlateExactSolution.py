@@ -3,8 +3,8 @@ Contains exact solution for square plate with dimensions(-0.5, -0.5, 0.5, 0.5)
 
 @author: iryna.tomanova
 """
-from edu.tomanova.splines.plate.Apex import Apex
-from edu.tomanova.splines.plate.SquarePlate import SquarePlate
+from tomanova.splines.core.plate.Apex import Apex
+from tomanova.splines.core.plate.SquarePlate import SquarePlate
 from edu.tomanova.splines.exact.tymoshenko.SquareSolver import Solver
 from edu.tomanova.splines.utils.ImageHelper import saveSymPyData
 from edu.tomanova.splines.utils.DataHelper import saveToFile
